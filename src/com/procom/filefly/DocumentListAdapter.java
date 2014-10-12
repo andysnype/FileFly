@@ -42,7 +42,7 @@ public class DocumentListAdapter extends BaseAdapter
 	@Override
 	public View getView(final int index, View convertView, ViewGroup parent)
 	{
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		// TODO Auto-generated method stub
 		return null;
