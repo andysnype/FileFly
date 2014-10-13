@@ -1,5 +1,6 @@
 package com.procom.filefly;
 
+import java.io.File;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -7,11 +8,13 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
@@ -39,6 +42,38 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        boolean mExternalStorageAvailable = false;
+        boolean mExternalStorageWriteable = false;
+
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            mExternalStorageAvailable = false;
+            mExternalStorageWriteable = false;
+        }
+        boolean success = mExternalStorageAvailable && mExternalStorageWriteable;
+        if (success)
+        {
+        	File appDir = Environment.getExternalStorageDirectory();
+            String appDirPath = appDir.getPath() +  "/FileFly";
+            appDir = new File(appDirPath);
+            success = appDir.mkdir();
+            if (success)
+            {
+            	appDir = new File(appDirPath + "/received");
+            	success = appDir.mkdir();
+            }
+        }
+        if (!success)
+        {
+        	Toast.makeText(this, "External storage failure: do not use app.", Toast.LENGTH_LONG).show();
+        }
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -73,8 +108,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             // this tab is selected.
             actionBar.addTab(
                     actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
+                             .setText(mSectionsPagerAdapter.getPageTitle(i))
+                             .setTabListener(this));
         }
     }
 
