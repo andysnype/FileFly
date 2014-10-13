@@ -1,8 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/background" >
     
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+        <TextView
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textColor="#f9f9f9"
+        	android:text="First Name:"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    	<EditText
+        	android:id="@+id/input_fname"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:textColor="#f9f9f9"
+        	android:textCursorDrawable="@null"
+        	android:ems="15"
+        	android:inputType="textPersonName|textCapWords" >
+
+    	</EditText>
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+        <TextView
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:textColor="#f9f9f9"
+        	android:text="Last Name:"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    	<EditText
+        	android:id="@+id/input_lname"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:textColor="#f9f9f9"
+        	android:textCursorDrawable="@null"
+        	android:ems="15"
+        	android:inputType="textPersonName|textCapWords" >
+
+    	</EditText>
+        
+    </LinearLayout>    
+
+    <Button
+        android:id="@+id/choose_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#f9f9f9"
+        android:text="Choose File" />
+
+    <TextView
+        android:id="@+id/selected_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#f9f9f9"
+        android:text="[No File Selected]"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/send_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#f9f9f9"
+        android:text="Send" />
+    
 </LinearLayout>

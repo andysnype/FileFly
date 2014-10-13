@@ -2,13 +2,13 @@ package com.procom.filefly;
 
 import java.util.List;
 
-import com.procom.filefly.model.Document;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.procom.filefly.model.Document;
 
 public class DocumentListAdapter extends BaseAdapter
 {
@@ -44,7 +44,7 @@ public class DocumentListAdapter extends BaseAdapter
 	{
 		LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		// TODO Auto-generated method stub
+		// TODO: implement this function
 		return null;
 	}
 }
