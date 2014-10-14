@@ -7,6 +7,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
@@ -28,9 +30,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * {@link android.support.v13.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Fragment senderFragment = new SenderFragment();
-    private Fragment receiverFragment = new ReceiverFragment();
-    private Fragment documentListFragment = new DocumentListFragment();
+    private Fragment mSenderFragment = new SenderFragment(); // instance of the SenderFragment to be managed by the ViewPager
+    private Fragment mReceiverFragment = new ReceiverFragment(); // instance of the ReceiverFragment to be managed by the ViewPager
+    private Fragment mDocumentListFragment = new DocumentListFragment(); // instance of the DocumentListFragment to be managed by the ViewPager
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -43,37 +45,63 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        /* BEGIN COMMENT SECTION
+         * =============================================================================================
+         * 
+         *  The code below creates two directories on the smartphone SD Card.
+         *  1. sdcard/FileFly (to hold documents to be transmitted via NFC)
+         *  2. sdcard/Filefly/received (to hold documents received from an NFC transmission)
+         *  
+         */
+        
         boolean mExternalStorageAvailable = false;
         boolean mExternalStorageWriteable = false;
 
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
+        if (Environment.MEDIA_MOUNTED.equals(state))
+        {
             mExternalStorageAvailable = true;
             mExternalStorageWriteable = true;
-        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        }
+        else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
+        {
             mExternalStorageAvailable = true;
             mExternalStorageWriteable = false;
-        } else {
+        }
+        else
+        {
             mExternalStorageAvailable = false;
             mExternalStorageWriteable = false;
         }
         boolean success = mExternalStorageAvailable && mExternalStorageWriteable;
         if (success)
         {
-        	File appDir = Environment.getExternalStorageDirectory();
-            String appDirPath = appDir.getPath() +  "/FileFly";
+        	File appDir = Environment.getExternalStorageDirectory(); // returns the path to the sd card
+            String appDirPath = appDir.getPath() +  "/FileFly"; // path to FileFly folder on sd card
             appDir = new File(appDirPath);
-            success = appDir.mkdir();
+            success = appDir.exists(); // test to see if folder exists already
+            if (!success) // i.e. if the folder does not already exist
+            {
+            	success = appDir.mkdir(); // create the directory
+            }
             if (success)
             {
             	appDir = new File(appDirPath + "/received");
-            	success = appDir.mkdir();
+            	success = appDir.exists(); // test to see if folder exists already
+            	if (!success) // i.e. if the folder does not already exist
+            	{
+            		success = appDir.mkdir(); // create the directory
+            	}
             }
         }
-        if (!success)
+        if (!success) // i.e. the directory(s) doesn't exist and could not create
         {
-        	Toast.makeText(this, "External storage failure: do not use app.", Toast.LENGTH_LONG).show();
+        	Toast.makeText(this, "External storage failure: do not use app.", Toast.LENGTH_LONG).show(); // show the user this message
         }
+        
+        /* END COMMENT SECTION
+         * =============================================================================================
+         */
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -93,9 +121,30 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
         {
             @Override
+            /**
+             * Called whenever a scroll has been fully completed and a different page is now selected.
+             * 
+             * @author Peter Piech
+             */
             public void onPageSelected(int position)
             {
                 actionBar.setSelectedNavigationItem(position);
+            }
+            
+            @Override
+            public void onPageScrolled(int position, float offset, int offsetPixels) {}
+
+            @Override
+            /**
+             * Called whenever the the scroll state changes (i.e. right when a scroll is started, or when a scroll finishes).
+             * 
+             * @author Peter Piech
+             */
+            public void onPageScrollStateChanged(int state)
+            {
+            	/* Following two lines close the soft keyboard when it is open after typing in the SenderFragment */
+            	final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
             }
         });
 
@@ -168,11 +217,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	switch (position)
         	{
         	case 0:
-        		return senderFragment;
+        		return mSenderFragment;
         	case 1:
-        		return receiverFragment;
+        		return mReceiverFragment;
         	case 2:
-        		return documentListFragment;
+        		return mDocumentListFragment;
         	}
         	return null;
             // getItem is called to instantiate the fragment for the given page.
