@@ -34,6 +34,12 @@
                 <action android:name="com.procom.filefly.RECEIVE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.CATEGORY_DEFAULT" />
+                <!--<data android:mimeType="mime-type" />-->
+                <!-- Fix above malformed XML line Saurabh -->
+            </intent-filter>
         </activity>
         
     </application>
