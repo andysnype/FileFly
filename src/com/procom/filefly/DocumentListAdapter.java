@@ -45,6 +45,7 @@ public class DocumentListAdapter extends BaseAdapter
 		LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		// TODO: implement this function
+		// TODO: SQLite database integration
 		return null;
 	}
 }

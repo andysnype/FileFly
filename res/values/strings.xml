@@ -3,8 +3,7 @@
 
     <string name="app_name">FileFly</string>
     <string name="title_section1">Send</string>
-    <string name="title_section2">Receive</string>
-    <string name="title_section3">Received</string>
+    <string name="title_section2">Received Files</string>
     <string name="action_settings">Settings</string>
 
 </resources>
