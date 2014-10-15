@@ -30,8 +30,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * {@link android.support.v13.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Fragment mSenderFragment = new SenderFragment(); // instance of the SenderFragment to be managed by the ViewPager
-    private Fragment mReceiverFragment = new ReceiverFragment(); // instance of the ReceiverFragment to be managed by the ViewPager
+    private Fragment mSenderFragment = new SendFragment(); // instance of the SenderFragment to be managed by the ViewPager
     private Fragment mDocumentListFragment = new DocumentListFragment(); // instance of the DocumentListFragment to be managed by the ViewPager
 
     /**
@@ -143,8 +142,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             public void onPageScrollStateChanged(int state)
             {
             	/* Following two lines close the soft keyboard when it is open after typing in the SenderFragment */
-            	final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
+            	closeKeyboard(); // close the keyboard
             }
         });
 
@@ -198,6 +196,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
+    
+    /**
+     * Simple method to close the keyboard.
+     * Known callers: MainActivity.onPageScrollStateChanged(), SendFragment.onClick()
+     * 
+     * @author Peter Piech
+     */
+    public void closeKeyboard()
+    {
+    	final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -214,24 +224,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public Fragment getItem(int position)
         {
+        	// getItem is called to instantiate the fragment for the given page.
         	switch (position)
         	{
         	case 0:
         		return mSenderFragment;
         	case 1:
-        		return mReceiverFragment;
-        	case 2:
         		return mDocumentListFragment;
-        	}
-        	return null;
-            // getItem is called to instantiate the fragment for the given page.
+        	default:
+        		return null;
+        	}            
         }
 
         @Override
         public int getCount()
         {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
@@ -244,10 +253,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+                default:
+                	return null;
             }
-            return null;
         }
     }
 }

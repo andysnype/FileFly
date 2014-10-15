@@ -34,7 +34,7 @@ import android.widget.Toast;
  * @author Peter Piech
  *
  */
-public class SenderFragment extends Fragment implements OnClickListener
+public class SendFragment extends Fragment implements OnClickListener
 {
 	/* Member variables used for the Android Beam API: */
 	private NfcAdapter mNfcAdapter; // Models the hardware NFC adapter
@@ -57,7 +57,7 @@ public class SenderFragment extends Fragment implements OnClickListener
 	 */
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.sender_fragment, container, false); // Populate the user interface
+		View rootView = inflater.inflate(R.layout.send_fragment, container, false); // Populate the user interface
 		
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity()); // Get the NFC adapter
 		mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
@@ -90,10 +90,20 @@ public class SenderFragment extends Fragment implements OnClickListener
 		switch (v.getId())
 		{
 		case R.id.choose_file: // The "Choose File" button was clicked
+			((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
+			
 			// TODO: implement choose file dialog
+			// TODO: use DialogActivity for String result
 			break;  // end of case R.id.choose_file
 			
 		case R.id.send_file: // The "Send" button was clicked
+			((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
+			
+			if (mFNameEditText.getText().toString().equals("") || mLNameEditText.getText().toString().equals("")) // i.e. the user has not entered text into the EditTexts
+			{
+				Toast.makeText(getActivity(), "Please enter your full name first.", Toast.LENGTH_LONG).show(); // show the user this message
+				break;
+			}
 			
 			String transfer_file = mFilenameTextView.getText().toString(); // get the filename String from the TextView's contents
 			if (transfer_file.equals("<No File Selected>")) // i.e. the default value that means no file has been chosen yet
