@@ -12,6 +12,8 @@ import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +50,33 @@ public class SendFragment extends Fragment implements OnClickListener
 	private Button mChooseFileButton; // Button correspinding to the "Choose File" button
 	private Button mSendButton; // Button corresponding to the "Send" button
 	
+	private static final int sMaxLength = 50; // the maximum length allowed in the EditTexts
+	private static final String sAcceptedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; // the allowed characters the user can input
+	
+	/**
+	 * Implements an array of {@link android.text.InputFilter}s that will be set on {@link android.widget.EditText}s to cleanse user input.
+	 * 
+	 * @author Peter Piech
+	 */
+	private static final InputFilter[] filterArray = new InputFilter[] {
+		new InputFilter.LengthFilter(SendFragment.sMaxLength),
+		
+		new InputFilter() {
+
+			@Override
+			public CharSequence filter(CharSequence source, int start, int end,Spanned dest, int dstart, int dend) {
+				if (end > start) {
+					char[] acceptedChars = SendFragment.sAcceptedChars.toCharArray();
+					for (int i = start; i < end; ++i) {
+						if (!new String(acceptedChars).contains(String.valueOf(source.charAt(i)))) {
+							return "";
+						}
+					}
+				}
+				return null;
+			}
+	}};
+	
 	@Override
 	/**
 	 * Inflates the layout from XML, gets the NFC Adapter, instantiates the Callback class used by
@@ -69,6 +98,8 @@ public class SendFragment extends Fragment implements OnClickListener
 		mChooseFileButton = (Button) rootView.findViewById(R.id.choose_file); // choose file button
 		mSendButton = (Button) rootView.findViewById(R.id.send_file); // send file button
 		
+		mFNameEditText.setFilters(filterArray); // set the filterArray to filter user input
+		mFNameEditText.setFilters(filterArray); // set the filterArray to filter user input
 		mFilenameTextView.setText("<No File Selected>"); // set the TextView to a variation of the default value set in the XML that is almost guaranteed to not represent a real filename
 		
 		/* Set the OnClickListeners for the buttons */
