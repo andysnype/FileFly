@@ -54,30 +54,54 @@
     	</EditText>
         
     </LinearLayout>    
-
-    <Button
-        android:id="@+id/choose_file"
-        android:layout_width="wrap_content"
+	
+    
+    <!-- 
+     * Put choose file and send buttons on same line with each button taking half the screen.
+     * Put name of file below these buttons, centered
+     * 
+     * @author Jacob Abramson 10/17/14
+     * 
+     -->
+    <TableLayout
+        android:id="@+id/TableLayout01"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#f9f9f9"
-        android:text="Choose File" />
-
+        android:layout_width="fill_parent"
+        android:stretchColumns="1" >
+        
+        <TableRow>
+    
+		    <Button
+		        android:id="@+id/choose_file"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:textColor="#f9f9f9"
+		        android:text="Choose File" 
+		        android:layout_weight="1" />
+		
+		    <Button
+		        android:id="@+id/send_file"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:textColor="#f9f9f9"
+		        android:text="Send"
+		        android:layout_weight="1" />
+		    
+		</TableRow>
+		
+	</TableLayout>
+    
     <TextView
-        android:id="@+id/selected_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#f9f9f9"
-        android:text="[No File Selected]"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/send_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#f9f9f9"
-        android:text="Send" />
+                android:id="@+id/selected_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="[No File Selected]"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#f9f9f9"
+                android:layout_weight="1" />
+    
     
 </LinearLayout>
