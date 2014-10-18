@@ -206,7 +206,7 @@ public class SendFragment extends Fragment implements OnClickListener
 				Log.d("FILEFLY", "Error: File URI not available!"); // TODO: remove after verifying this won't be triggered ever
 				break; // cancel any further processing of the button click
 			}
-			
+			// TODO: verify correct placing of line below; it may be the case that multiple calls cause bad behavior
 			mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
 			break; // end of case R.id.send_file
 			
