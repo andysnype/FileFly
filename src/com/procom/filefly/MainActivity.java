@@ -43,14 +43,127 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        /* BEGIN COMMENT SECTION
+
+        // Set up the action bar.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        // When swiping between different sections, select the corresponding
+        // tab. We can also use ActionBar.Tab#select() to do this if we have
+        // a reference to the Tab.
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
+        {
+            @Override
+            public void onPageSelected(int position)
+            {
+                actionBar.setSelectedNavigationItem(position);
+            }
+            
+            @Override
+            public void onPageScrolled(int position, float offset, int offsetPixels) {}
+
+            @Override
+            /**
+             * Called whenever the the scroll state changes (i.e. right when a scroll is started, or when a scroll finishes).
+             * 
+             * @author Peter Piech
+             */
+            public void onPageScrollStateChanged(int state)
+            {
+            	/* Following two lines close the soft keyboard when it is open after typing in the SenderFragment */
+            	closeKeyboard(); // close the keyboard
+            }
+        });
+
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
+        {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            actionBar.addTab(
+                    actionBar.newTab()
+                             .setText(mSectionsPagerAdapter.getPageTitle(i))
+                             .setTabListener(this));
+        }
+    }
+    
+    @Override
+    /**
+     * Handles verifying access to external storage and creates necessary directories
+     * once write access has been verified by calling {@link #onStart()}.
+     * <p>
+     * This method is called after {@link #onCreate()} in the {@link android.app.Activity} lifecycle.
+     * 
+     * @author Peter Piech
+     */
+	protected void onStart()
+    {
+		super.onStart();
+		createDirectories(); // create the /FileFly and /FileFly/received directories on the SD Card (external storage)
+	}
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings)
+        {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
+    {
+        // When the given tab is selected, switch to the corresponding page in
+        // the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
+    
+    /**
+     * Checks the status of the external storage and creates necessary
+     * folders on the SD Card.
+     * 
+     * @author Peter Piech
+     */
+    private void createDirectories()
+    {
+    	/* BEGIN COMMENT SECTION
          * =============================================================================================
          * 
          *  The code below creates two directories on the smartphone SD Card.
          *  1. sdcard/FileFly (to hold documents to be transmitted via NFC)
          *  2. sdcard/Filefly/received (to hold documents received from an NFC transmission)
-         *  
+         *  =============================================================================================
          */
         
         boolean mExternalStorageAvailable = false;
@@ -101,101 +214,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         /* END COMMENT SECTION
          * =============================================================================================
          */
-
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-        {
-            @Override
-            /**
-             * Called whenever a scroll has been fully completed and a different page is now selected.
-             * 
-             * @author Peter Piech
-             */
-            public void onPageSelected(int position)
-            {
-                actionBar.setSelectedNavigationItem(position);
-            }
-            
-            @Override
-            public void onPageScrolled(int position, float offset, int offsetPixels) {}
-
-            @Override
-            /**
-             * Called whenever the the scroll state changes (i.e. right when a scroll is started, or when a scroll finishes).
-             * 
-             * @author Peter Piech
-             */
-            public void onPageScrollStateChanged(int state)
-            {
-            	/* Following two lines close the soft keyboard when it is open after typing in the SenderFragment */
-            	closeKeyboard(); // close the keyboard
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++)
-        {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                             .setText(mSectionsPagerAdapter.getPageTitle(i))
-                             .setTabListener(this));
-        }
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
-    {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
     
     /**
      * Simple method to close the keyboard.
