@@ -78,12 +78,12 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 			}
 	}};
 	
-	@Override
 	/**
 	 * Instantiates the class members prior to the view being inflated.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
 	public void onCreate(Bundle savedInstanceState)
 	// TODO: verify NFC adapter is actually enabled
 	// TODO: display dialog to user to enable NFC using a call to startActivity(new Intent(Settings.ACTION_NFC_SETTINGS))
@@ -91,17 +91,20 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		super.onCreate(savedInstanceState);
 		
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity()); // Get the NFC adapter
-		mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
-		mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
+		if (mNfcAdapter != null) // i.e. the device does not have NFC
+		{
+			mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
+			mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
+		}
 	}
-	
-	@Override
+
 	/**
 	 * Inflates the layout from XML, gets the NFC Adapter, instantiates the Callback class used by
 	 * the Android Beam API, and fetches the Views by their Ids.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.send_fragment, container, false); // Populate the user interface
@@ -123,13 +126,13 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
         return rootView;
 	}
 
-	@Override
 	/**
 	 * This is the method that the {@link android.view.View.OnClickListener} interface requires.
 	 * It responds to button touches by the user with respect to the particular View's Id.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
 	public void onClick(View v)
 	{
 		switch (v.getId())
@@ -137,9 +140,9 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		case R.id.choose_file: // The "Choose File" button was clicked
 			((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
 			
-			ChooseFileDialogFragment choosefiledialogFrag = new ChooseFileDialogFragment();
-			choosefiledialogFrag.setTargetFragment(this, 0);
-			choosefiledialogFrag.show(getActivity().getFragmentManager(), "CHOOSE_FILE_DIALOG_FRAG");
+			ChooseFileDialogFragment choosefiledialogFrag = new ChooseFileDialogFragment(); // initialize the choose file dialog window fragment
+			choosefiledialogFrag.setTargetFragment(this, 0); // set the result target for the choose file dialog window fragment to be this fragment
+			choosefiledialogFrag.show(getActivity().getFragmentManager(), "CHOOSE_FILE_DIALOG_FRAG"); // show the user the choose file dialog window fragment
 			break;  // end of case R.id.choose_file
 			
 		case R.id.send_file: // The "Send" button was clicked
@@ -242,25 +245,25 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		 */
 		public FileUriCallback() {}
 
-		@Override
 		/**
 		 * Create content {@link android.net.Uri}s as needed to share with another device.
 		 * 
 		 * @author Peter Piech
 		 */
+		@Override
 		public Uri[] createBeamUris(NfcEvent event)
 		{
 			return mFileUris; // Simply return the array of Uris. No dynamic generation is performed.
 		}
 	}
 
-	@Override
 	/**
 	 * Interface callback method to retrieve the result of the 
 	 * user file selection in the {@link com.procom.filefly.ChooseFileDialogFragment}.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
 	public void onFileChosen(ChooseFileDialogFragment dialog)
 	{
 		mFilenameTextView.setText(dialog.getChosenFilename());

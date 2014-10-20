@@ -70,12 +70,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             @Override
             public void onPageScrolled(int position, float offset, int offsetPixels) {}
 
-            @Override
             /**
              * Called whenever the the scroll state changes (i.e. right when a scroll is started, or when a scroll finishes).
              * 
              * @author Peter Piech
              */
+            @Override
             public void onPageScrollStateChanged(int state)
             {
             	/* Following two lines close the soft keyboard when it is open after typing in the SenderFragment */
@@ -97,7 +97,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
     
-    @Override
     /**
      * Handles verifying access to external storage and creates necessary directories
      * once write access has been verified by calling {@link #onStart()}.
@@ -106,6 +105,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * 
      * @author Peter Piech
      */
+    @Override
 	protected void onStart()
     {
 		super.onStart();
