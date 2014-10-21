@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
@@ -91,10 +92,21 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		super.onCreate(savedInstanceState);
 		
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity()); // Get the NFC adapter
-		if (mNfcAdapter != null) // i.e. the device does not have NFC
+		if (mNfcAdapter != null) // i.e. the device has NFC
 		{
-			mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
-			mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
+			if (mNfcAdapter.isEnabled()) // verify that NFC adapter is turned on
+			{
+				mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
+				mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
+			}
+			else // i.e. the user must turn on NFC
+			{
+				//AlertDialog alert = new AlertDialog.Builder(getActivity()).create();
+			}
+		}
+		else // i.e. the device does not have NFC
+		{
+			
 		}
 	}
 
