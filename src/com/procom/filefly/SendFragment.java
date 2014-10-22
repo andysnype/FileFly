@@ -10,11 +10,13 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -99,7 +101,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		}
 		else
 		{
-			requireNfcEnabled();
+			requireNfcEnabled();  // force the user to quit the app since the phone doesn't have NFC hardware
 		}
 		
 	}
@@ -115,6 +117,8 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	{
 		View rootView = inflater.inflate(R.layout.send_fragment, container, false); // Populate the user interface
 		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()); // get the SharedPreferences in order to retrieve the last saved first and last names of the user
+		
 		/* Retrieve the various views in the viewgroup for later use */
 		mFNameEditText = (EditText) rootView.findViewById(R.id.input_fname); // first name (of sender) EditText
 		mLNameEditText = (EditText) rootView.findViewById(R.id.input_lname); // last name (of sender) EditText
@@ -125,6 +129,9 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		mFNameEditText.setFilters(filterArray); // set the filterArray to filter user input
 		mFNameEditText.setFilters(filterArray); // set the filterArray to filter user input
 		
+		mFNameEditText.setText(prefs.getString("FirstName", "")); // set the EditText to the last saved first name the user used to send a file
+		mLNameEditText.setText(prefs.getString("LastName", "")); // set the EditText to the last saved last name the user used to send a file
+		
 		/* Set the OnClickListeners for the buttons */
 		mChooseFileButton.setOnClickListener(this); // set this instance of SenderFragment to be the OnClickListener handler
 		mSendButton.setOnClickListener(this); // set this instance of SenderFragment to be the OnClickListener handler
@@ -132,11 +139,17 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
         return rootView;
 	}
 	
+	/**
+	 * Resumes the {@link SendFragment} after the {@link #onStart} method is called
+	 * and after the {@link onDestroyView} method is called when the fragment comes back into view.
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		requireNfcEnabled();
+		requireNfcEnabled(); // check to see if the user enabled NFC since the last time the app was in view
 	}
 
 	/**
@@ -169,57 +182,57 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		{
 			if (!mNfcAdapter.isEnabled()) // i.e. the user must turn on NFC
 			{
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setTitle(R.string.turn_on_nfc);
-				builder.setMessage(R.string.goto_settings);
-				builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  // create a dialog window to show the user
+				builder.setTitle(R.string.turn_on_nfc); // set the title of the dialog window
+				builder.setMessage(R.string.goto_settings); // set the message of the dialog window
+				builder.setOnCancelListener(new DialogInterface.OnCancelListener() { // set the action that will occur when the user attempts to skip or cancel the message
 
 					@Override
 					public void onCancel(DialogInterface arg0) {
-						getActivity().finish();
+						getActivity().finish(); // close the app
 					}
 					
 				});
-				builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-					}
-				});
-				builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() { // set the action that will occur when the user opts to go into Settings
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						getActivity().finish();
+						startActivity(new Intent(Settings.ACTION_NFC_SETTINGS)); // open Settings app
 					}
 				});
-				AlertDialog alert = builder.create();
-				alert.show();
+				builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // set the action that will occur when the user opts to cancel turning on NFC
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						getActivity().finish(); // close the app
+					}
+				});
+				AlertDialog alert = builder.create(); // actually create the Dialog object
+				alert.show(); // show the Dialog to the user
 			}
 		}
 		else // i.e. the device does not have NFC
 		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setTitle(R.string.nfc_unavailable);
-			builder.setMessage(R.string.no_nfc);
-			builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()); // create a dialog window to show the user
+			builder.setTitle(R.string.nfc_unavailable); // set the title of the dialog window
+			builder.setMessage(R.string.no_nfc); // set the message of the dialog window
+			builder.setOnCancelListener(new DialogInterface.OnCancelListener() { // set the action that will occur when the user attempts to skip or cancel the message
 
 				@Override
 				public void onCancel(DialogInterface arg0) {
-					getActivity().finish();
+					getActivity().finish(); // close the app
 				}
 				
 			});
-			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { // set the action that will occur when the user acknowledges
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					getActivity().finish();
+					getActivity().finish(); // close the app
 				}
 			});
-			AlertDialog alert = builder.create();
-			alert.show();
+			AlertDialog alert = builder.create(); // actually create the Dialog object
+			alert.show(); // show the Dialog to the user
 		}
 	}
 	
@@ -252,6 +265,13 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		{
 			Toast.makeText(getActivity(), "Enter your full name first.", Toast.LENGTH_LONG).show(); // show the user this message
 			return;
+		}
+		else
+		{
+			SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+			editor.putString("FirstName", mFNameEditText.getText().toString());
+			editor.putString("LastName", mLNameEditText.getText().toString());
+			editor.commit();
 		}
 		
 		String transfer_file = mFilenameTextView.getText().toString(); // get the filename String from the TextView's contents
@@ -326,13 +346,16 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	/**
 	 * Interface callback method to retrieve the result of the 
 	 * user file selection in the {@link com.procom.filefly.ChooseFileDialogFragment}.
+	 * <p>
+	 * This is called by the {@link com.procom.filefly.ChooseFileDialogFragment}
+	 * to notify {@link SendFragment} that a result has been determined.
 	 * 
 	 * @author Peter Piech
 	 */
 	@Override
 	public void onFileChosen(ChooseFileDialogFragment dialog)
 	{
-		mFilenameTextView.setText(dialog.getChosenFilename());
+		mFilenameTextView.setText(dialog.getChosenFilename()); // set the TextView to be the resulting filename that the ChooseFileDialogFragment is storing
 	}
 	
 	/**
