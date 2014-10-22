@@ -38,8 +38,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.CATEGORY_DEFAULT" />
-                <!--<data android:mimeType="mime-type" />-->
-                <!-- Fix above malformed XML line Saurabh -->
+                <data android:mimeType="*/*" />
+                <!-- Fixed above malformed XML line by Saurabh -->
             </intent-filter>
         </activity>
         

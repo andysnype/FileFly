@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * The {@link android.app.Activity} that will launch in response to an
@@ -32,6 +33,8 @@ public class ReceiveActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_receive);
         // TODO: implement response to ACTION_VIEW intent to fetch transferred file
+		handleViewIntent();
+		Toast.makeText(this, "Received file successfully..!", Toast.LENGTH_LONG).show(); // show the user this message
 		// TODO: copy transferred file into SDCard:/FileFly/received directory, and only then:
 		// TODO: add file record to internal SQLite database for use by DocumentListFragment
         // TODO: initiate the MainActivity after above operations complete via an Intent with extra information
@@ -67,6 +70,7 @@ public class ReceiveActivity extends FragmentActivity
 	 * @author Saurabh Sharma
 	 * 
 	 */
+	
 	private void handleViewIntent() 
     {
         // Get the Intent action
