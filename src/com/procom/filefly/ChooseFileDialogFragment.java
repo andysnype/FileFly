@@ -36,13 +36,15 @@ public class ChooseFileDialogFragment extends DialogFragment
 		mPath = new File(Environment.getExternalStorageDirectory() + "/FileFly"); // gets the directory to the SD Card FileFly folder
 		loadFileList(); // initializes the array of strings with filenames
 	}
-	
-	@Override
+
 	/**
-	 * 
+	 * Initializes the callback variable by retrieving a reference to
+	 * the target fragment which must implement the {@link ChooseFileDialogListener}
+	 * interface.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -55,30 +57,30 @@ public class ChooseFileDialogFragment extends DialogFragment
 			throw new ClassCastException("Calling Fragment must implement com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener");
 		}
 	}
-	
-	@Override
-	@NonNull
+
 	/**
 	 * Draws the dialog box and sets the content using an {@link android.app.AlertDialog.Builder}.
 	 * 
 	 * @author Peter Piech
 	 */
+	@Override
+	@NonNull
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
 		AlertDialog.Builder builder = new Builder(getActivity()); // create a new dialog builder
 		builder.setTitle(R.string.choose_file); // set the title of the dialog window
 		builder.setItems(mFileList, new DialogInterface.OnClickListener() // set the items the user chooses from
 		{
-			@Override
 			/**
 			 * Marks the chosen file for return later
 			 * 
 			 * @author Peter Piech
 			 */
+			@Override
 			public void onClick(DialogInterface dialog, int which) // implement the onClick method to determine what happens when the user chooses an item
 			{
 				mChosenFile = mFileList[which]; // set the chosen file to be the string at the index clicked on
-				mListener.onFileChosen(ChooseFileDialogFragment.this);
+				mListener.onFileChosen(ChooseFileDialogFragment.this); // the actual callback to the target fragment with the result passed as a parameter
 			}
 		});
 		return builder.create(); // return the actual dialog
@@ -106,7 +108,6 @@ public class ChooseFileDialogFragment extends DialogFragment
 	        FilenameFilter filter = new FilenameFilter() // filter all files we don't care about
 	        {
 
-	            @Override
 	            /**
 	             * Accepts files with any extension at all.
 	             * <p>
@@ -114,6 +115,7 @@ public class ChooseFileDialogFragment extends DialogFragment
 	             * 
 	             * @author Peter Piech
 	             */
+	            @Override
 	            public boolean accept(File dir, String filename)
 	            {
 	            	int extBeginIndex = filename.lastIndexOf("."); // find the index of the last period
@@ -137,6 +139,13 @@ public class ChooseFileDialogFragment extends DialogFragment
 	    }
 	}
 	
+	/**
+	 * Interface that the target fragment must implement in order to
+	 * receive the result code of the choose file dialog window
+	 * selection by the user.
+	 * 
+	 * @author Peter Piech
+	 */
 	public interface ChooseFileDialogListener
 	{
 		public void onFileChosen(ChooseFileDialogFragment dialog);
