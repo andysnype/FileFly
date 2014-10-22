@@ -10,5 +10,12 @@
     <string name="choose_file">Choose File</string>
     <string name="send">Send</string>
     <string name="no_file">&lt;No File Selected&gt;</string>
+    <string name="turn_on_nfc">Turn on NFC</string>
+    <string name="goto_settings">Go to Settings to turn on NFC. Check under Wireless &amp; Network Settings.</string>
+    <string name="cancel">Cancel</string>
+    <string name="settings">Settings</string>
+    <string name="nfc_unavailable">NFC is unavailable</string>
+    <string name="no_nfc">This app requires NFC to use.</string>
+    <string name="ok">OK</string>
 
 </resources>
