@@ -2,12 +2,12 @@ package com.procom.filefly;
 
 import java.io.File;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +21,7 @@ import android.view.MenuItem;
  * @author Saurabh Sharma, Peter Piech
  *
  */
-public class ReceiveActivity extends Activity
+public class ReceiveActivity extends FragmentActivity
 {
 	private String mParentPath; // A File object containing the path to the transferred files
     private Intent mIntent; // Incoming Intent
@@ -32,8 +32,11 @@ public class ReceiveActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_receive);
         // TODO: implement response to ACTION_VIEW intent to fetch transferred file
+		// TODO: copy transferred file into SDCard:/FileFly/received directory, and only then:
 		// TODO: add file record to internal SQLite database for use by DocumentListFragment
-        // TODO: initiate the MainActivity after above operations complete
+        // TODO: initiate the MainActivity after above operations complete via an Intent with extra information
+		// TODO: in MainActivity, parse the extra information to mean that the app should just send an ACTION_VIEW intent to the system to open the file. This is so that the most recent activity of record is MainActivity and not ReceiveActivity.
+		// TODO: verify that after the appropriate application opens the file, the back button will bring the user to the MainActivity annd not ReceiveActivity
     }
 	
 	@Override
