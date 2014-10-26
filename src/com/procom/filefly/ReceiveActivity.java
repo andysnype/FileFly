@@ -26,9 +26,10 @@ public class ReceiveActivity extends FragmentActivity
 {
 	private String mParentPath; // A File object containing the path to the transferred files
     private Intent mIntent; // Incoming Intent
-    private String firstName;
-    private String lastName;
-    private String originalFileName;
+    private String mFirstName;
+    private String mLastName;
+    private String mFileName;
+    private String mOriginalFileName;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,9 +45,9 @@ public class ReceiveActivity extends FragmentActivity
 		// TODO: in MainActivity, parse the extra information to mean that the app should just send an ACTION_VIEW intent to the system to open the file. This is so that the most recent activity of record is MainActivity and not ReceiveActivity.
 		// TODO: verify that after the appropriate application opens the file, the back button will bring the user to the MainActivity annd not ReceiveActivity
 		
-		firstName = "";
-		lastName = "";
-		fileName = "";
+		mFirstName = "";
+		mLastName = "";
+		mFileName = "";
     }
 	
 	@Override
@@ -120,7 +121,7 @@ public class ReceiveActivity extends FragmentActivity
         grabNameFile(fileName);
         
         // Create a File object for this filename (with original fileName????)
-        File copiedFile = new File(originalFileName);
+        File copiedFile = new File(mOriginalFileName);
         //File copiedFile = new File(fileName);
         // Get a string containing the file's parent directory
         return copiedFile.getParent();
@@ -137,15 +138,15 @@ public class ReceiveActivity extends FragmentActivity
     		return;
     	}
     	
-    	firstName = result[0];
-    	lastName = result[1];
-    	originalFileName = "";
+    	mFirstName = result[0];
+    	mLastName = result[1];
+    	mOriginalFileName = "";
     	
     	// append original filename along with underscores if included
     	for (int i = 2; i < result.length; i++) {
-    		originalFileName += result[i];
+    		mOriginalFileName += result[i];
     		if (i+1 < result.length) {
-    			originalFileName += "_";
+    			mOriginalFileName += "_";
     		}
     	}
     }
