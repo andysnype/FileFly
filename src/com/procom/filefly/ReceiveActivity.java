@@ -95,9 +95,11 @@ public class ReceiveActivity extends FragmentActivity
              */
             if (TextUtils.equals(beamUri.getScheme(), "file")) {
                 mParentPath = handleFileUri(beamUri);
-            } else if (TextUtils.equals(
-                    beamUri.getScheme(), "content")) {
+            } else if (TextUtils.equals(beamUri.getScheme(), "content")) {
                 mParentPath = handleContentUri(beamUri);
+            } else {
+            	// re-dispatch the intent to the system
+            	startActivity(mIntent);
             }
         }
     }
