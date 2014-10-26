@@ -26,6 +26,9 @@ public class ReceiveActivity extends FragmentActivity
 {
 	private String mParentPath; // A File object containing the path to the transferred files
     private Intent mIntent; // Incoming Intent
+    private String firstName;
+    private String lastName;
+    private String originalFileName;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +43,10 @@ public class ReceiveActivity extends FragmentActivity
         // TODO: initiate the MainActivity after above operations complete via an Intent with extra information
 		// TODO: in MainActivity, parse the extra information to mean that the app should just send an ACTION_VIEW intent to the system to open the file. This is so that the most recent activity of record is MainActivity and not ReceiveActivity.
 		// TODO: verify that after the appropriate application opens the file, the back button will bring the user to the MainActivity annd not ReceiveActivity
+		
+		firstName = "";
+		lastName = "";
+		fileName = "";
     }
 	
 	@Override
@@ -106,10 +113,38 @@ public class ReceiveActivity extends FragmentActivity
     {
         // Get the path part of the URI
         String fileName = beamUri.getPath();
-        // Create a File object for this filename
-        File copiedFile = new File(fileName);
+        
+
+        
+        // Create a File object for this filename (with original fileName????)
+        File copiedFile = new File(originalFileName);
+        //File copiedFile = new File(fileName);
         // Get a string containing the file's parent directory
         return copiedFile.getParent();
+    }
+    
+    // parses out first and last names and original filename
+    private void grabNameFile(String fn) {
+    	
+    	// split string based on underscores
+    	String[] result = fn.split("_");
+    	
+    	if (result.length < 3) {
+    		//error, this means first/last name wasn't appended
+    		return;
+    	}
+    	
+    	firstName = result[0];
+    	lastName = result[1];
+    	originalFileName = "";
+    	
+    	// append original filename along with underscores if included
+    	for (int i = 2; i < result.length; i++) {
+    		originalFileName += result[i];
+    		if (i+1 < result.length) {
+    			originalFileName += "_";
+    		}
+    	}
     }
     
     /**
