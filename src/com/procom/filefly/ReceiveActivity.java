@@ -114,7 +114,8 @@ public class ReceiveActivity extends FragmentActivity
         // Get the path part of the URI
         String fileName = beamUri.getPath();
         
-
+        // parse out first/last name and original filename
+        grabNameFile(fileName);
         
         // Create a File object for this filename (with original fileName????)
         File copiedFile = new File(originalFileName);
