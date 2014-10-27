@@ -46,7 +46,7 @@ public class ReceiveActivity extends FragmentActivity
 		
 		firstName = "";
 		lastName = "";
-		originalFileName = "";
+		fileName = "";
     }
 	
 	@Override
