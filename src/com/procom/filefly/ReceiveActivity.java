@@ -24,11 +24,10 @@ import android.widget.Toast;
  */
 public class ReceiveActivity extends FragmentActivity
 {
-	private String mParentPath; // A File object containing the path to the transferred files
+	private String mPath; // A File object containing the path to the transferred files
     private Intent mIntent; // Incoming Intent
     private String mFirstName;
     private String mLastName;
-    private String mFileName;
     private String mOriginalFileName;
 	
 	@Override
@@ -36,7 +35,9 @@ public class ReceiveActivity extends FragmentActivity
     {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_receive);
-        // TODO: implement response to ACTION_VIEW intent to fetch transferred file
+		mFirstName = new String();
+		mLastName = new String();
+		mOriginalFileName = new String();
 		handleViewIntent();
 		Toast.makeText(this, "Received file successfully..!", Toast.LENGTH_LONG).show(); // show the user this message
 		// TODO: copy transferred file into SDCard:/FileFly/received directory, and only then:
@@ -45,9 +46,7 @@ public class ReceiveActivity extends FragmentActivity
 		// TODO: in MainActivity, parse the extra information to mean that the app should just send an ACTION_VIEW intent to the system to open the file. This is so that the most recent activity of record is MainActivity and not ReceiveActivity.
 		// TODO: verify that after the appropriate application opens the file, the back button will bring the user to the MainActivity annd not ReceiveActivity
 		
-		mFirstName = "";
-		mLastName = "";
-		mFileName = "";
+		
     }
 	
 	@Override
@@ -95,9 +94,9 @@ public class ReceiveActivity extends FragmentActivity
              * Test for the type of URI, by getting its scheme value
              */
             if (TextUtils.equals(beamUri.getScheme(), "file")) {
-                mParentPath = handleFileUri(beamUri);
+                mPath = handleFileUri(beamUri);
             } else if (TextUtils.equals(beamUri.getScheme(), "content")) {
-                mParentPath = handleContentUri(beamUri);
+                mPath = handleContentUri(beamUri);
             } else {
             	// re-dispatch the intent to the system
             	startActivity(mIntent);
@@ -124,7 +123,7 @@ public class ReceiveActivity extends FragmentActivity
         File copiedFile = new File(mOriginalFileName);
         //File copiedFile = new File(fileName);
         // Get a string containing the file's parent directory
-        return copiedFile.getParent();
+        return copiedFile.getAbsolutePath();
     }
     
     // parses out first and last names and original filename
