@@ -1,8 +1,9 @@
 FileFly
----------------------------------------
+========================================
 An NFC file sharing platform for Android
 
-Contributors:
+Contributors
+========================================
 Jacob Abramson
 Andy Kakkaramadam
 Peter Piech
