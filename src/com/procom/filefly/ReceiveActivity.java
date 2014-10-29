@@ -14,22 +14,41 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
- * The {@link android.app.Activity} that will launch in response to an
- * ACTION_VIEW intent from the Android Beam API, copy the transferred
- * file into the received subdirectory of the FileFly directory found
- * on the root of the SD Card.
+ * The {@link android.support.v4.app.FragmentActivity} that will launch
+ * in response to an ACTION_VIEW intent from the Android Beam API, copy
+ * the transferred file into the received subdirectory of the FileFly
+ * directory found on the root of the SD Card.
  * 
  * @author Saurabh Sharma, Peter Piech
- *
+ * @version 0.2a
+ * @since 2014-09-14
  */
 public class ReceiveActivity extends FragmentActivity
 {
-	private String mPath; // A File object containing the path to the transferred files
-    private Intent mIntent; // Incoming Intent
+	/** A {@link java.io.File} representing the path to the transferred file */
+	private String mPath;
+	
+	/**
+	 * The incoming {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema
+	 * containing a {@link android.net.Uri} for the transferred file.
+	 */
+    private Intent mIntent;
+    
+    /** The parsed out sender's first name */
     private String mFirstName;
+    
+    /** The parse out sender's last name */
     private String mLastName;
+    
+    /** The parse out original filename that was selected by the user */
     private String mOriginalFileName;
 	
+    /**
+	 * Inflates the layout from XML and handles the incoming
+	 * {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema.
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -49,6 +68,11 @@ public class ReceiveActivity extends FragmentActivity
 		
     }
 	
+	/**
+	 * Inflates the options menu in the {@link android.app.ActionBar} with the Settings menu item
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -57,6 +81,11 @@ public class ReceiveActivity extends FragmentActivity
         return true;
     }
 	
+	/**
+	 * Listens for user selection of menu items in the {@link android.app.ActionBar}
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -72,7 +101,8 @@ public class ReceiveActivity extends FragmentActivity
     }
 	
 	/**
-	 * <Add Description Here Saurabh>
+	 * Gets the incoming {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema
+	 * and hands off the {@link android.net.Uri} to appropriate functions.
 	 * 
 	 * @author Saurabh Sharma
 	 * 
@@ -126,7 +156,11 @@ public class ReceiveActivity extends FragmentActivity
         return copiedFile.getAbsolutePath();
     }
     
-    // parses out first and last names and original filename
+    /**
+     * Parses out first and last names and original filename
+     * 
+     * @author Jacob Abramson
+     */
     private void grabNameFile(String fn) {
     	
     	// split string based on underscores
