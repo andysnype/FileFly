@@ -5,6 +5,7 @@
     <string name="title_section1">Send</string>
     <string name="title_section2">Received Files</string>
     <string name="action_settings">Settings</string>
+    <string name="action_howtouse">How to Use</string>
     <string name="first_name">First Name:</string>
     <string name="last_name">Last Name:</string>
     <string name="choose_file">Choose File</string>
@@ -17,5 +18,9 @@
     <string name="nfc_unavailable">NFC is unavailable</string>
     <string name="no_nfc">This app requires NFC to use.</string>
     <string name="ok">OK</string>
+    
+    <string name="howtouse_paragraph">This app requires the sender to place their files in the FileFly 
+        							  folder on their SD Card. Receivers will find that their received 
+        							  files are in the FileFly/received folder also on their SD Card.</string>
 
 </resources>
