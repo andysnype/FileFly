@@ -94,16 +94,15 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	{
 		super.onCreate(savedInstanceState);
 		mNfcAdapter = NfcAdapter.getDefaultAdapter(getActivity()); // Get the NFC adapter
-		if (mNfcAdapter != null)
+		if (mNfcAdapter != null) // i.e. the device has a physical NFC adapter
 		{
 			mFileUriCallback = new FileUriCallback(); // Instantiate the Callback class used by the Android Beam API
 			mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback, getActivity()); // actually set the callback instance for the Android Beam API
 		}
-		else
+		else // i.e. no physical NFC adapter is available
 		{
 			requireNfcEnabled();  // force the user to quit the app since the phone doesn't have NFC hardware
 		}
-		
 	}
 
 	/**
@@ -176,7 +175,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		}
 	}
 	
-	public void requireNfcEnabled()
+	public boolean requireNfcEnabled()
 	{
 		if (mNfcAdapter != null) // i.e. the device has NFC
 		{
@@ -185,14 +184,6 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());  // create a dialog window to show the user
 				builder.setTitle(R.string.turn_on_nfc); // set the title of the dialog window
 				builder.setMessage(R.string.goto_settings); // set the message of the dialog window
-				builder.setOnCancelListener(new DialogInterface.OnCancelListener() { // set the action that will occur when the user attempts to skip or cancel the message
-
-					@Override
-					public void onCancel(DialogInterface arg0) {
-						getActivity().finish(); // close the app
-					}
-					
-				});
 				builder.setPositiveButton(R.string.settings, new DialogInterface.OnClickListener() { // set the action that will occur when the user opts to go into Settings
 					
 					@Override
@@ -200,15 +191,45 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 						startActivity(new Intent(Settings.ACTION_NFC_SETTINGS)); // open Settings app
 					}
 				});
-				builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() { // set the action that will occur when the user opts to cancel turning on NFC
+				
+				/* Test to see if the user had NFC enabled, selected a file, and then disabled NFC.
+				 * To avoid undefined behavior from the Android Beam API that might cause crashes,
+				 *  the app will be closed under these conditions
+				 */
+				String transfer_file = mFilenameTextView.getText().toString(); // get the filename String from the TextView's contents
+				if (!transfer_file.equals(getResources().getString(R.string.no_file))) // i.e. the filename string indicates the user has already selected a file
+				{
+					builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() // set the action that will occur when the user opts to cancel turning on NFC
+					{
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							getActivity().finish(); // close the app
+						}
+					});
+					builder.setOnCancelListener(new DialogInterface.OnCancelListener() // set the action that will occur when the user attempts to skip or cancel the message
+					{
+						@Override
+						public void onCancel(DialogInterface dialog)
+						{
+							getActivity().finish(); // close the app
+						}
 					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						getActivity().finish(); // close the app
-					}
-				});
+					});
+				}
+				else // i.e. the filename string indicates the user has not yet selected a file
+				{
+					builder.setNegativeButton(R.string.cancel, null); // no onClickListener is required; no action to be taken except dismiss the dialog window
+					
+					/* No onCancelListener is required; no action to be taken except dismiss the dialog window */
+				}
 				AlertDialog alert = builder.create(); // actually create the Dialog object
 				alert.show(); // show the Dialog to the user
+				return false; // NFC was not available at calling time
+			}
+			else // NFC hardware is present and enabled
+			{
+				return true; // NFC was available at calling time
 			}
 		}
 		else // i.e. the device does not have NFC
@@ -216,23 +237,26 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()); // create a dialog window to show the user
 			builder.setTitle(R.string.nfc_unavailable); // set the title of the dialog window
 			builder.setMessage(R.string.no_nfc); // set the message of the dialog window
-			builder.setOnCancelListener(new DialogInterface.OnCancelListener() { // set the action that will occur when the user attempts to skip or cancel the message
-
+			builder.setOnCancelListener(new DialogInterface.OnCancelListener() // set the action that will occur when the user attempts to skip or cancel the message
+			{
 				@Override
-				public void onCancel(DialogInterface arg0) {
+				public void onCancel(DialogInterface dialog)
+				{
 					getActivity().finish(); // close the app
 				}
 				
 			});
-			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() { // set the action that will occur when the user acknowledges
-				
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() // set the action that will occur when the user acknowledges
+			{
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				public void onClick(DialogInterface dialog, int which)
+				{
 					getActivity().finish(); // close the app
 				}
 			});
 			AlertDialog alert = builder.create(); // actually create the Dialog object
 			alert.show(); // show the Dialog to the user
+			return false; // NFC was not available at calling time
 		}
 	}
 	
@@ -260,6 +284,11 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	public void onClickSend()
 	{
 		((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
+		
+		if (!requireNfcEnabled()) // determine if NFC hardware is present and enabled
+		{
+			return; // only allow the user to send a file if NFC is turned on
+		}
 		
 		if (mFNameEditText.getText().toString().equals("") || mLNameEditText.getText().toString().equals("")) // i.e. the user has not entered text into the EditTexts
 		{

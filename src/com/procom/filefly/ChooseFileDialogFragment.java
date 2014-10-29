@@ -81,26 +81,28 @@ public class ChooseFileDialogFragment extends DialogFragment
 	{
 		AlertDialog.Builder builder = new Builder(getActivity()); // create a new dialog builder
 		
-		// no files available
-		if (mFileList.length < 1) {
-			builder.setTitle(R.string.no_files_title);
-			builder.setMessage(R.string.no_files_text);
-		} else
+		if (mFileList.length < 1) // i.e. no files in FileFly folder
+		{
+			builder.setTitle(R.string.no_files_title); // set the title of the dialog window
+			builder.setMessage(R.string.no_files_text); // set the dialog window to have a message instead of a list
+		}
+		else // i.e. one or more files (with extensions) are in the FileFly folder
+		{
 			builder.setTitle(R.string.choose_file); // set the title of the dialog window
 			builder.setItems(mFileList, new DialogInterface.OnClickListener() // set the items the user chooses from
-		{
-			/**
-			 * Marks the chosen file for return later
-			 * 
-			 * @author Peter Piech
-			 */
-			@Override
-			public void onClick(DialogInterface dialog, int which) // implement the onClick method to determine what happens when the user chooses an item
 			{
-				mChosenFile = mFileList[which]; // set the chosen file to be the string at the index clicked on
-				mListener.onFileChosen(ChooseFileDialogFragment.this); // the actual callback to the target fragment with the result passed as a parameter
-			}
-		});
+				/**
+				 * Marks the chosen file for return later
+				 * @author Peter Piech
+				 */
+				@Override
+				public void onClick(DialogInterface dialog, int which) // implement the onClick method to determine what happens when the user chooses an item
+				{
+					mChosenFile = mFileList[which]; // set the chosen file to be the string at the index clicked on
+					mListener.onFileChosen(ChooseFileDialogFragment.this); // the actual callback to the target fragment with the result passed as a parameter
+					}
+				});
+		}
 		return builder.create(); // return the actual dialog
 	}
 	
