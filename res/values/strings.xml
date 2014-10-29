@@ -12,7 +12,7 @@
     <string name="no_files_title">No Files Available</string>
     <string name="no_files_text">Please download files directly onto the FileFly directory on your SD Card.</string>
     <string name="send">Send</string>
-    <string name="no_file">&lt;No File Selected&gt;</string>
+    <string name="no_file">&lt;No File Chosen&gt;</string>
     <string name="turn_on_nfc">Turn on NFC</string>
     <string name="goto_settings">Go to Settings to turn on NFC. Check under Wireless &amp; Network Settings.</string>
     <string name="cancel">Cancel</string>
@@ -20,9 +20,9 @@
     <string name="nfc_unavailable">NFC is unavailable</string>
     <string name="no_nfc">This app requires NFC to use.</string>
     <string name="ok">OK</string>
-    
-    <string name="howtouse_paragraph">This app requires the sender to place their files in the FileFly 
-        							  folder on their SD Card. Receivers will find that their received 
-        							  files are in the FileFly/received folder also on their SD Card.</string>
+    <string name="howtouse_paragraph">This app requires files to be placed in the FileFly folder 
+        							  on the SD Card to be able to send them. Received files can
+        							  be found in the FileFly/received folder on the SD Card.
+        							  </string>
 
 </resources>
