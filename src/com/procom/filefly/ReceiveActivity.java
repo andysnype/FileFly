@@ -1,11 +1,15 @@
 package com.procom.filefly;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -101,9 +105,59 @@ public class ReceiveActivity extends FragmentActivity
             	// re-dispatch the intent to the system
             	startActivity(mIntent);
             }
+            
+            // call function to save file to FileFly/received folder
+            saveFile();
         }
     }
+	
+	/**
+	 * To save the received file to local storage in FileFly/received
+	 * on the SD card.
+	 * 
+	 * @author Jacob Abramson
+	 */
+	private void saveFile() {
+		
+		// check if external storage is writable
+		if (isExternalStorageWritable()) {
+			
+			// grab destination folder for transferred file
+			File appDir = Environment.getExternalStorageDirectory(); // returns the path to the sd card
+            String appReceivedDirPath = appDir.getAbsolutePath() +  "/FileFly/received/" + mOriginalFileName; // path to FileFly/received folder PLUS filename
+            File appReceivedDir = new File(appReceivedDirPath);
+            
+            // grab source destination of file currently stored internally
+            File source = new File(mPath);
+            
+            try {
+            	FileUtils.copyFile(source, appReceivedDir);
+            } catch (IOException e) {
+            	e.printStackTrace();
+            }
+			
+            Toast.makeText(this, "File saved successfully.", Toast.LENGTH_LONG).show(); // show the user this message
+		}
+		
+		else {
+			Toast.makeText(this, "External storage failure: do not use app.", Toast.LENGTH_LONG).show(); // show the user this message
+		}
+	}
     
+	/**
+	 * To check if external storage is writable
+	 * 
+	 * @author Jacob Abramson
+	 */
+	//Checks if external storage is available for read and write
+	public boolean isExternalStorageWritable() {
+	    String state = Environment.getExternalStorageState();
+	    if (Environment.MEDIA_MOUNTED.equals(state)) {
+	        return true;
+	    }
+	    return false;
+	}
+	
 	/**
 	 * To get the directory path, get the path part of the URI, which contains all of the URI 
      * except the file: prefix. Create a File from the path part, then get the parent path of the File:
