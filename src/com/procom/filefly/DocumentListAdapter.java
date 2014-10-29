@@ -17,7 +17,7 @@ import com.procom.filefly.model.Document;
  * 
  * @author Peter Piech
  * @version 0.2a
- * @since 2014-09-14
+ * @since 2014-10-12
  *
  */
 public class DocumentListAdapter extends BaseAdapter

@@ -18,22 +18,42 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
- * The {@link android.app.Activity} that will launch in response to an
- * ACTION_VIEW intent from the Android Beam API, copy the transferred
- * file into the received subdirectory of the FileFly directory found
- * on the root of the SD Card.
+ * The {@link android.support.v4.app.FragmentActivity} that will launch
+ * in response to an ACTION_VIEW intent from the Android Beam API, copy
+ * the transferred file into the received subdirectory of the FileFly
+ * directory found on the root of the SD Card.
  * 
- * @author Saurabh Sharma, Peter Piech
+ * @author Peter Piech, Saurabh Sharma, Jacob Abramson
+ * @version 0.2a
+ * @since 2014-10-15
  *
  */
 public class ReceiveActivity extends FragmentActivity
 {
-	private String mPath; // A File object containing the path to the transferred files
-    private Intent mIntent; // Incoming Intent
+	/** A {@link java.io.File} representing the path to the transferred file */
+	private String mPath;
+	
+	/**
+	 * The incoming {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema
+	 * containing a {@link android.net.Uri} for the transferred file.
+	 */
+    private Intent mIntent;
+    
+    /** The parsed out sender's first name */
     private String mFirstName;
+    
+    /** The parsed out sender's last name */
     private String mLastName;
+    
+    /** The parsed out original filename that was selected by the user */
     private String mOriginalFileName;
 	
+    /**
+     * Inflates the layout from XML and handles the incoming
+     * {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema.
+     * 
+     * @author Peter Piech
+     */
 	@Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -52,7 +72,12 @@ public class ReceiveActivity extends FragmentActivity
 		
 		
     }
-	
+
+	/**
+	 * Inflates the options menu in the {@link android.app.ActionBar} with the Settings menu item
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -61,6 +86,11 @@ public class ReceiveActivity extends FragmentActivity
         return true;
     }
 	
+	/**
+	 * Listens for user selection of menu items in the {@link android.app.ActionBar}
+	 * 
+	 * @author Peter Piech
+	 */
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -76,12 +106,12 @@ public class ReceiveActivity extends FragmentActivity
     }
 	
 	/**
-	 * <Add Description Here Saurabh>
+	 * Gets the incoming {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema
+	 * and hands off the {@link android.net.Uri} to appropriate functions.
 	 * 
 	 * @author Saurabh Sharma
 	 * 
 	 */
-	
 	private void handleViewIntent() 
     {
         // Get the Intent action
@@ -145,12 +175,13 @@ public class ReceiveActivity extends FragmentActivity
 	}
     
 	/**
-	 * To check if external storage is writable
+	 * Checks if external storage is writable
+	 * 
+	 * @return True if external storage is writable, False otherwise
 	 * 
 	 * @author Jacob Abramson
 	 */
-	//Checks if external storage is available for read and write
-	public boolean isExternalStorageWritable() {
+	private boolean isExternalStorageWritable() {
 	    String state = Environment.getExternalStorageState();
 	    if (Environment.MEDIA_MOUNTED.equals(state)) {
 	        return true;
@@ -162,10 +193,14 @@ public class ReceiveActivity extends FragmentActivity
 	 * To get the directory path, get the path part of the URI, which contains all of the URI 
      * except the file: prefix. Create a File from the path part, then get the parent path of the File:
 	 * 
+	 * @param beamUri The {@link android.net.Uri} embedded in the incoming {@link android.content.Intent}
+	 * 
+	 * @return The filename stored in the {@link android.net.Uri}
+	 * 
 	 * @author Saurabh Sharma
 	 * 
 	 */
-    public String handleFileUri(Uri beamUri) 
+    private String handleFileUri(Uri beamUri) 
     {
         // Get the path part of the URI
         String fileName = beamUri.getPath();
@@ -181,13 +216,12 @@ public class ReceiveActivity extends FragmentActivity
     }
     
     /**
-     * To parse out filename's first and last name attributes given
-     * an absolute path to the file
+     * Parses out first and last names and original filename
+     * 
+     * @param The absolute path to a file
      * 
      * @author Jacob Abramson
      */
-    
-    // parses out first and last names and original filename
     private void grabNameFile(String absPath) {
     	
     	// parse filename from absolute path
@@ -219,10 +253,14 @@ public class ReceiveActivity extends FragmentActivity
      * To test the authority of the content URI and retrieve the the path and file name for the 
      * transferred file
      * 
+     * @param beamUri The {@link android.net.Uri} embedded in the incoming {@link android.content.Intent}
+	 * 
+	 * @return The filename stored in the {@link android.net.Uri}
+     * 
      * @author Saurabh Sharma
      * 
      */
-    public String handleContentUri(Uri beamUri) {
+    private String handleContentUri(Uri beamUri) {
         // Position of the filename in the query Cursor
         int filenameIndex;
         // File object for the filename

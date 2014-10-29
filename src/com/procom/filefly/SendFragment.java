@@ -41,23 +41,54 @@ import com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener;
  * This class implements {@link android.view.View.OnClickListener} in order to process button clicks.
  * 
  * @author Peter Piech
+ * @version 0.2a
+ * @since 2014-10-12
  *
  */
 public class SendFragment extends Fragment implements OnClickListener, ChooseFileDialogListener
 {
 	/* Member variables used for the Android Beam API: */
-	private NfcAdapter mNfcAdapter; // Models the hardware NFC adapter
-	private Uri[] mFileUris = new Uri[1]; // Array of length 1 to hold Uri of file to be transmitted
+	/** The {@link android.nfc.NfcAdapter} that models the hardware NFC adapter */
+	private NfcAdapter mNfcAdapter;
+	
+	/**
+	 * The {@link java.lang.reflect.Array} of size 1 of {@link android.net.Uri}s that is returned 
+	 * by the callback method, {@link com.procom.filefly.SendFragment.FileUriCallback#createBeamUris},
+	 * to the Android Beam API.  The single element of the array represents the file the user selected
+	 * to send via NFC.
+	 */
+	private Uri[] mFileUris = new Uri[1];
+	
+	/**
+	 * The instance of {@link com.procom.filefly.SendFragment.FileUriCallback} used to
+	 * provide the callback to the Android Beam API aftering setting it as such with
+	 * {@link android.nfc.NfcAdapter#setBeamPushUrisCallback}
+	 */
 	private FileUriCallback mFileUriCallback; // Instance of inner class to provide Uris to Android Beam
 	
 	/* Member variables corresponding to text Views: */
-	private EditText mFNameEditText; // View containing the first name of the sender
-	private EditText mLNameEditText; // View containing the last name of the sender
-	private TextView mFilenameTextView; // View containing the name of the file in the FileFly directory
-	private Button mChooseFileButton; // Button corresponding to the "Choose File" button
-	private Button mSendButton; // Button corresponding to the "Send" button
+	/** The {@link android.widget.EditText} containing the first name of the sender */
+	private EditText mFNameEditText;
 	
-	private static final int sMaxLength = 50; // the maximum length allowed in the EditTexts
+	/** The {@link android.widget.EditText} containing the last name of the sender */
+	private EditText mLNameEditText;
+
+	/** The {@link android.widget.TextView} containing the name of a file in the FileFly directory */
+	private TextView mFilenameTextView;
+
+	/** The {@link android.widget.Button} corresponding to the "Choose File" button */
+	private Button mChooseFileButton;
+	
+	/** The {@link android.widget.Button} corresponding to the "Send" button */
+	private Button mSendButton;
+	
+	/** The maximum number of input characters for either of {@link #mFNameEditText} or {@link #mLNameEditText} */
+	private static final int sMaxLength = 50;
+	
+	/**
+	 * A {@link java.lang.String} containing the allowed input characters for either of {@link #mFNameEditText} or {@link #mLNameEditText}.
+	 * All characters not present in this {@link java.lang.String} are not able to be input by the user.
+	 */
 	private static final String sAcceptedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; // the allowed characters the user can input
 	
 	/**
@@ -175,7 +206,16 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 		}
 	}
 	
-	public boolean requireNfcEnabled()
+	/**
+	 * Presents the user with an {@link android.app.AlertDialog} that either forces the user to close
+	 * the app without action if the device does not have NFC hardware, prompts the user to enable
+	 * the device's NFC adapter with a link to the corresponding Settings menu, or forces the user to
+	 * either enable the device's NFC adapter or close the app if a filename has already been chosen
+	 * through the callback method for {@link com.procom.filefly.ChooseFileDialogFragment}.
+	 * 
+	 * @author Peter Piech
+	 */
+	private boolean requireNfcEnabled()
 	{
 		if (mNfcAdapter != null) // i.e. the device has NFC
 		{
@@ -266,7 +306,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	 * 
 	 * @author Peter Piech
 	 */
-	public void onClickChooseFile()
+	private void onClickChooseFile()
 	{
 		((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
 		
@@ -281,7 +321,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	 * 
 	 * @author Peter Piech
 	 */
-	public void onClickSend()
+	private void onClickSend()
 	{
 		((MainActivity)getActivity()).closeKeyboard(); // close the keyboard first
 		

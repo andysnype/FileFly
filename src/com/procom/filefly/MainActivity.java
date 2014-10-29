@@ -18,6 +18,18 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+/**
+ * The {@link android.support.v4.app.FragmentActivity} responsible for handling the
+ * {@link android.app.ActionBar} and {@link android.support.v4.view.ViewPager}
+ * user elements, handling selection of tabs corresponding to either of
+ * {@link com.procom.filefly.SendFragment} or {@link com.procom.filefly.DocumentListFragment},
+ * and initializing write access to the /"SD Card"/FileFly/received/ directory tree.
+ * 
+ * @author Peter Piech
+ * @version 0.2a
+ * @since 2014-09-28
+ *
+ */
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
 
@@ -30,14 +42,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * {@link android.support.v13.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private Fragment mSenderFragment = new SendFragment(); // instance of the SenderFragment to be managed by the ViewPager
-    private Fragment mDocumentListFragment = new DocumentListFragment(); // instance of the DocumentListFragment to be managed by the ViewPager
+    
+    /** Instance of {@link com.procom.filefly.SendFragment} to be managed by the ViewPager */
+    private Fragment mSenderFragment = new SendFragment();
+    
+    /** Instance of {@link com.procom.filefly.DocumentListFragment} to be managed by the ViewPager */
+    private Fragment mDocumentListFragment = new DocumentListFragment();
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    /** The {@link android.support.v4.view.ViewPager} that will host the section contents */
     ViewPager mViewPager;
 
+    /**
+     * Inflates the layout from XML, creates the {@link android.app.ActionBar} as
+     * an {@link android.app.ActionBar#NAVIGATION_MODE_TABS}, initializes the
+     * {@link android.support.v4.view.ViewPager}, and adds the tabs to
+     * {@link android.app.ActionBar}.
+     * 
+     * @author Peter Piech
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -61,17 +83,33 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // a reference to the Tab.
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
         {
+        	/**
+             * Notifies the {@link android.app.ActionBar} of the index of the
+             * tab when it is selected by the user.
+             * 
+             * @author Peter Piech
+             */
             @Override
             public void onPageSelected(int position)
             {
                 actionBar.setSelectedNavigationItem(position);
             }
             
+            /**
+             * Notifies the {@link android.app.ActionBar} of the index of the
+             * tab when it is scrolled to by the user.
+             * 
+             * @author Peter Piech
+             */
             @Override
             public void onPageScrolled(int position, float offset, int offsetPixels) {}
 
             /**
-             * Called whenever the the scroll state changes (i.e. right when a scroll is started, or when a scroll finishes).
+             * Notifies the {@link android.app.ActionBar} when a scroll
+             * is initiated or finished by the user.
+             * <p>
+             * Called whenever the the scroll state changes (i.e. right when a scroll
+             * is started, or when a scroll finishes).
              * 
              * @author Peter Piech
              */
@@ -113,6 +151,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
 
 
+    /**
+	 * Inflates the options menu in the {@link android.app.ActionBar} with the Settings menu item
+	 * 
+	 * @author Peter Piech
+	 */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -121,6 +164,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         return true;
     }
 
+    /**
+	 * Listens for user selection of menu items in the {@link android.app.ActionBar}
+	 * 
+	 * @author Peter Piech
+	 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -135,6 +183,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles the {@link android.app.ActionBar}'s response
+     * when a tab is selected by the user.
+     * 
+     * @author Peter Piech
+     */
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction)
     {
@@ -143,9 +197,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         mViewPager.setCurrentItem(tab.getPosition());
     }
 
+    /**
+     * Handles the {@link android.app.ActionBar}'s response
+     * when a tab is un-selected by the user.
+     * 
+     * @author Peter Piech
+     */
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
 
+    /**
+     * Handles the {@link android.app.ActionBar}'s response
+     * when a tab is re-selected by the user.
+     * 
+     * @author Peter Piech
+     */
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
     
@@ -231,15 +297,32 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
+     * 
+     * @author Peter Piech
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
 
+    	/**
+    	 * Contructs an instance of {@link com.procom.filefly.MainActivity.SectionsPagerAdapter}
+    	 * using the supertype {@link android.support.v13.app.FragmentPagerAdapter} constructor.
+    	 * 
+    	 * @author Peter Piech
+    	 */
         public SectionsPagerAdapter(FragmentManager fm)
         {
             super(fm);
         }
 
+        /**
+         * Returns a reference to the {@link android.app.Fragment}
+         * at the given tab index
+         * 
+         * @return A reference to the {@link android.app.Fragment}
+         * at the given tab index
+         * 
+         * @author Peter Piech
+         */
         @Override
         public Fragment getItem(int position)
         {
@@ -255,6 +338,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	}            
         }
 
+        /**
+         * Returns the number of tabs being
+         * managed by the {@link android.support.v4.view.ViewPager}
+         * 
+         * @return The number of tabs being
+         * managed by the {@link android.support.v4.view.ViewPager}
+         * 
+         * @author Peter Piech
+         */
         @Override
         public int getCount()
         {
@@ -262,6 +354,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             return 2;
         }
 
+        /**
+         * Returns the title of the tab at the given
+         * tab index
+         * 
+         * @return The title of the tab at the given
+         * tab index
+         * 
+         * @author Peter Piech
+         */
         @Override
         public CharSequence getPageTitle(int position)
         {

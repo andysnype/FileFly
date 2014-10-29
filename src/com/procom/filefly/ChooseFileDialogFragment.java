@@ -18,14 +18,14 @@ import android.app.DialogFragment;
  * 
  * @author Peter Piech
  * @version 0.2a
- * @since 2014-09-14
+ * @since 2014-10-18
  */
 public class ChooseFileDialogFragment extends DialogFragment
 {
 	/** The {@link java.lang.reflect.Array} of filenames found in the FileFly directory on external storage */
 	private String[] mFileList;
 	
-	/** The {@link java.io.File} representing the FileFly external storage directory*/
+	/** The {@link java.io.File} representing the FileFly external storage directory */
 	private File mPath;
 	
 	/** The filename (including extension) of the file the user selected */
@@ -72,6 +72,8 @@ public class ChooseFileDialogFragment extends DialogFragment
 
 	/**
 	 * Draws the dialog box and sets the content using an {@link android.app.AlertDialog.Builder}.
+	 * If no files exist in the FileFly directory, a message dialog window is shown to the user
+	 * to indicate this instead of a list of filenames.
 	 * 
 	 * @author Peter Piech
 	 */
