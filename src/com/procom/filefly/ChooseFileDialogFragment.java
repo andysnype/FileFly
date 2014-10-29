@@ -86,9 +86,8 @@ public class ChooseFileDialogFragment extends DialogFragment
 			builder.setTitle(R.string.no_files_title);
 			builder.setMessage(R.string.no_files_text);
 		} else
-		
-		builder.setTitle(R.string.choose_file); // set the title of the dialog window
-		builder.setItems(mFileList, new DialogInterface.OnClickListener() // set the items the user chooses from
+			builder.setTitle(R.string.choose_file); // set the title of the dialog window
+			builder.setItems(mFileList, new DialogInterface.OnClickListener() // set the items the user chooses from
 		{
 			/**
 			 * Marks the chosen file for return later

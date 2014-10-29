@@ -232,7 +232,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 				}
 			});
 			AlertDialog alert = builder.create(); // actually create the Dialog object
-			//alert.show(); // show the Dialog to the user
+			alert.show(); // show the Dialog to the user
 		}
 	}
 	
