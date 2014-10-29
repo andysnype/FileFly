@@ -126,19 +126,8 @@ public class ReceiveActivity extends FragmentActivity
         return copiedFile.getAbsolutePath();
     }
     
-    /**
-     * To parse out filename's first and last name attributes given
-     * an absolute path to the file
-     * 
-     * @author Jacob Abramson
-     */
-    
     // parses out first and last names and original filename
-    private void grabNameFile(String absPath) {
-    	
-    	// parse filename from absolute path
-    	String[] delimSlashes = absPath.split("/");
-    	String fn = delimSlashes[delimSlashes.length - 1];
+    private void grabNameFile(String fn) {
     	
     	// split string based on underscores
     	String[] result = fn.split("_");
