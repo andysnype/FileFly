@@ -80,6 +80,13 @@ public class ChooseFileDialogFragment extends DialogFragment
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
 		AlertDialog.Builder builder = new Builder(getActivity()); // create a new dialog builder
+		
+		// no files available
+		if (mFileList.length < 1) {
+			builder.setTitle(R.string.no_files_title);
+			builder.setMessage(R.string.no_files_text);
+		} else
+		
 		builder.setTitle(R.string.choose_file); // set the title of the dialog window
 		builder.setItems(mFileList, new DialogInterface.OnClickListener() // set the items the user chooses from
 		{
