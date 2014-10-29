@@ -17,25 +17,13 @@ import android.app.DialogFragment;
  * draws the user interface for this interaction.
  * 
  * @author Peter Piech
- * @version 0.2a
- * @since 2014-09-14
  */
 public class ChooseFileDialogFragment extends DialogFragment
 {
-	/** The {@link java.lang.reflect.Array} of filenames found in the FileFly directory on external storage */
-	private String[] mFileList;
-	
-	/** The {@link java.io.File} representing the FileFly external storage directory*/
-	private File mPath;
-	
-	/** The filename (including extension) of the file the user selected */
-	private String mChosenFile;
-	
-	/** Instance of the abstract {@link com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener}
-	 * interface (which means it is an instance of a class that implements it.  This object listens for item
-	 * selection through the callback method {@link com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener#onFileChosen}
-	 * called in {@link }*/
-	private ChooseFileDialogListener mListener;
+	private String[] mFileList; // Array of filenames found
+	private File mPath; // Path to external storage directory
+	private String mChosenFile; // Filename the user selected
+	private ChooseFileDialogListener mListener; // interface instance; listens for item selection
 	
 	/**
 	 * Constructor that initializes private member variables
@@ -160,13 +148,6 @@ public class ChooseFileDialogFragment extends DialogFragment
 	 */
 	public interface ChooseFileDialogListener
 	{
-		/**
-		 * Calls back to the instance of {@link com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener}
-		 * to notify of the result of the {@link com.procom.filefly.ChooseFileDialogFragment}.
-		 * 
-		 * @param dialog The instance of the {@link com.procom.filefly.ChooseFileDialogFragment} shown to the user.
-		 * 
-		 */
 		public void onFileChosen(ChooseFileDialogFragment dialog);
 	}
 }

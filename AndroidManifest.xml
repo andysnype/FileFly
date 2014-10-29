@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.procom.filefly"
     android:versionCode="1"
-    android:versionName="0.2a" >
+    android:versionName="0.1a" >
 
     <uses-sdk
         android:minSdkVersion="16"
