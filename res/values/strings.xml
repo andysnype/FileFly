@@ -10,7 +10,7 @@
     <string name="last_name">Last Name:</string>
     <string name="choose_file">Choose File</string>
     <string name="no_files_title">No Files Available</string>
-    <string name="no_files_text">Please download files directly onto the FileFly directory on your SD Card.</string>
+    <string name="no_files_text">Download files directly into the FileFly folder on the SD Card for them to be available.</string>
     <string name="send">Send</string>
     <string name="no_file">&lt;No File Chosen&gt;</string>
     <string name="turn_on_nfc">Turn on NFC</string>
