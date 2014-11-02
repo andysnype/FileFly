@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -64,7 +65,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        
+        onNewIntent(getIntent()); // handle the case where a file is being received and the app was not already open
+        
+        setContentView(R.layout.activity_main); // inflate XML layout
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -148,6 +152,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     {
 		super.onStart();
 		createDirectories(); // create the /FileFly and /FileFly/received directories on the SD Card (external storage)
+	}
+    
+    /**
+     * Handles new, incoming {@link android.content.Intent}s. This method only performs actions
+     * on the intent if it has the {@link android.content.Intent#ACTION_VIEW} schema
+     * indicating it is an incoming file.
+     * 
+     * @author Peter Piech
+     */
+    @Override
+	protected void onNewIntent(Intent intent)
+	{
+		super.onNewIntent(intent);
+		setIntent(intent); // replace the Activity's existing intent with this new intent
+		String intentAction = intent.getAction(); // retrieve the intent action
+		if (intentAction.equals(Intent.ACTION_VIEW)) // i.e. an incoming file intent
+    	{
+    		Receive receive = new Receive(this);
+    		receive.handleViewIntent();
+    	}
 	}
 
 
