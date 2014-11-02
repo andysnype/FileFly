@@ -225,7 +225,7 @@ public class Receive
             	e.printStackTrace();
             }
 			
-            Toast.makeText(mActivity, "File saved successfully.", Toast.LENGTH_LONG).show(); // show the user this message
+            Toast.makeText(mActivity, "File saved successfully!", Toast.LENGTH_LONG).show(); // show the user this message
 		}
 		
 		else

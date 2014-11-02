@@ -51,7 +51,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private Fragment mDocumentListFragment = new DocumentListFragment();
 
     /** The {@link android.support.v4.view.ViewPager} that will host the section contents */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
+    
+    /**
+     * Boolean used in conjunction with {@link com.procom.filefly.MainActivity#onNewIntent} to determine if
+     * a file was received and if the "Received Files" tab should be opened
+     */
+    private boolean openReceivedFileAndTab;
 
     /**
      * Inflates the layout from XML, creates the {@link android.app.ActionBar} as
@@ -65,6 +71,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        openReceivedFileAndTab = false; // initialize to false
         
         onNewIntent(getIntent()); // handle the case where a file is being received and the app was not already open
         
@@ -155,6 +163,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	}
     
     /**
+     * Handles resumption from being paused.  This will check if a file was received and
+     * open the "Received Files" tab if so. This method is called by the system
+     * after {@link #onNewIntent} finishes.
+     * 
+     * @author Peter Piech
+     */
+    @Override
+    protected void onResume()
+    {
+    	super.onResume();
+    	if (openReceivedFileAndTab)
+    	{
+    		openReceivedFileAndTab = false;
+    		getActionBar().setSelectedNavigationItem(1); // open the "Received Files" tab
+    	}
+    }
+    
+    /**
      * Handles new, incoming {@link android.content.Intent}s. This method only performs actions
      * on the intent if it has the {@link android.content.Intent#ACTION_VIEW} schema
      * indicating it is an incoming file.
@@ -171,6 +197,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	{
     		Receive receive = new Receive(this);
     		receive.handleViewIntent();
+    		openReceivedFileAndTab = true;
     	}
 	}
 
