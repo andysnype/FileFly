@@ -46,13 +46,14 @@ public class Receive
     private Activity mActivity;
     
     /**
-     * Constructs a new {@link com.procom.filefly.Receive} object.
+     * Constructs a new {@link com.procom.filefly.Receive} object
+     * and initializes member fields.
      * 
      * @author Peter Piech
      */
     public Receive(Activity activity)
     {
-    	mDateTransferred = new Date();
+    	mDateTransferred = new Date(); // sets this date as the current timestamp
     	mFirstName = new String();
     	mLastName = new String();
     	mOriginalFileName = new String();
@@ -172,6 +173,8 @@ public class Receive
      * Parses out first and last names and original filename
      * 
      * @param The absolute path to a file
+     * 
+     * @return The unparsed proper file name which excludes the "files" prefix that the Android Beam API prepends
      * 
      * @author Jacob Abramson
      */
