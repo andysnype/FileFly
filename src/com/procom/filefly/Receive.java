@@ -221,7 +221,7 @@ public class Receive
             
             try
             {
-            	FileUtils.copyFile(mFileSource, fileDest);
+            	FileUtils.moveFile(mFileSource, fileDest);
             }
             catch (IOException e)
             {
