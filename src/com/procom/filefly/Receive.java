@@ -29,6 +29,9 @@ public class Receive
 {
 	/** A {@link java.io.File} representing the path to the transferred file */
 	private File mFileSource;
+	
+	/** A {@link java.io.File} representing the path to the file after being saved locally */
+	private File mFileDest;
     
     /** The parsed out sender's first name */
     private String mFirstName;
@@ -98,6 +101,9 @@ public class Receive
 
             // call function to save file to FileFly/received folder
             saveFile();
+            
+            // open file automatically after saving it locally
+            //FileViewer.openFile(context goes here, mFileDest);
         }
     }
 
@@ -217,17 +223,17 @@ public class Receive
 			
 			// grab destination folder for transferred file
             String fileDestPath = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/FileFly/received/" + mOriginalFileName; // path to FileFly/received folder PLUS filename
-            File fileDest = new File(fileDestPath);
+            mFileDest = new File(fileDestPath);
             
             try
             {
-            	FileUtils.moveFile(mFileSource, fileDest);
+            	FileUtils.moveFile(mFileSource, mFileDest);
             }
             catch (IOException e)
             {
             	e.printStackTrace();
             }
-			
+            
             Toast.makeText(mActivity, "File saved successfully!", Toast.LENGTH_LONG).show(); // show the user this message
 		}
 		
