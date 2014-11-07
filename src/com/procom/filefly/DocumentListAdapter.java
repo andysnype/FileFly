@@ -26,13 +26,13 @@ public class DocumentListAdapter extends BaseAdapter
 	 * The {@link android.app.Activity} which hosts the a {@link android.widget.ListView} directly or indirectly
 	 * in a {@link android.app.Fragment}
 	 */
-	private Context _context;
+	private Context mContext;
 	
 	/**
 	 * The {@link java.util.List} of {@link com.procom.filefly.model.Document}s that back the items in
 	 * the {@link android.widget.ListView}
 	 */
-	private List<Document> _documents;
+	private List<Document> mDocuments;
 	
 	/**
 	 * Constructs an instance of {@link com.procom.filefly.DocumentListAdapter}.
@@ -45,8 +45,8 @@ public class DocumentListAdapter extends BaseAdapter
 	 */
 	public DocumentListAdapter(Context context, List<Document> documents)
 	{
-		_context = context;
-		_documents = documents;
+		mContext = context;
+		mDocuments = documents;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class DocumentListAdapter extends BaseAdapter
 	@Override
 	public int getCount()
 	{
-		return _documents.size();
+		return mDocuments.size();
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class DocumentListAdapter extends BaseAdapter
 	@Override
 	public Object getItem(int index)
 	{
-		return _documents.get(index);
+		return mDocuments.get(index);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class DocumentListAdapter extends BaseAdapter
 	@Override
 	public View getView(final int index, View convertView, ViewGroup parent)
 	{
-		LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		// TODO: implement this function
 		// TODO: SQLite database integration

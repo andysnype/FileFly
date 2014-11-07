@@ -14,16 +14,16 @@ import java.util.Date;
 public class Document
 {
 	/** Name and extension of the file */
-	private String _filename;
+	private String mFilename;
 
 	/** Sender's first name */
-	private String _ownerFirstName;
+	private String mOwnerFirstName;
 	
 	/** Sender's last name */
-	private String _ownerLastName;
+	private String mOwnerLastName;
 	
 	/** Date and time of transfer */
-	private Date _dateTransferred;
+	private Date mDateTransferred;
 	
 	/**
 	 * Constructs an instance of {@link com.procom.filefly.model.Document}.  Additional constructor may be added
@@ -33,10 +33,10 @@ public class Document
 	 */
 	public Document(String filename, String ownerFirstName, String ownerLastName, Date dateTransferred)
 	{	
-		_filename = filename;
-		_ownerFirstName = ownerFirstName;
-		_ownerLastName = ownerLastName;
-		_dateTransferred = dateTransferred;
+		mFilename = filename;
+		mOwnerFirstName = ownerFirstName;
+		mOwnerLastName = ownerLastName;
+		mDateTransferred = dateTransferred;
 	}
 	
 	/* Getters for the various private fields of the Document class */
@@ -48,7 +48,7 @@ public class Document
 	 */
 	public String getFilename()
 	{
-		return new String(_filename);
+		return new String(mFilename);
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class Document
 	 */
 	public String getOwnerFirstName()
 	{
-		return new String(_ownerFirstName);
+		return new String(mOwnerFirstName);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class Document
 	 */
 	public String getOwnerLastName()
 	{
-		return new String(_ownerLastName);
+		return new String(mOwnerLastName);
 	}
 	
 	/**
@@ -81,6 +81,6 @@ public class Document
 	 */
 	public Date getDateTransferred()
 	{
-		return new Date(_dateTransferred.getTime());
+		return new Date(mDateTransferred.getTime());
 	}
 }
