@@ -7,10 +7,7 @@ import java.util.Date;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
-import com.procom.filefly.model.Document;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -224,7 +221,7 @@ public class FilesIntentHandler
 		{
 			
 			// grab destination folder for transferred file
-            String fileDestPath = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/FileFly/received/" + mOriginalFileName; // path to FileFly/received folder PLUS filename
+            String fileDestPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FileFly/received/" + mOriginalFileName; // path to FileFly/received folder PLUS filename
             mFileDest = new File(fileDestPath);
             
             try
@@ -252,6 +249,54 @@ public class FilesIntentHandler
 	}
 	
 	/**
+	 * Gets a copy of the file owner's first name. This method should be called
+	 * after {@link #handleViewIntent} or the behavior will be undefined.
+	 * 
+	 * @return A copy of the file owner's first name
+	 * @author Peter Piech
+	 */
+	public String getFileOwnerFirstName()
+	{
+		return new String(mFirstName);
+	}
+	
+	/**
+	 * Gets a copy of the file owner's last name. This method should be called
+	 * after {@link #handleViewIntent} or the behavior will be undefined.
+	 * 
+	 * @return A copy of the file owner's last name
+	 * @author Peter Piech
+	 */
+	public String getFileOwnerLastName()
+	{
+		return new String(mLastName);
+	}
+	
+	/**
+	 * Gets a copy of the name of the file. This method should be called
+	 * after {@link #handleViewIntent} or the behavior will be undefined.
+	 * 
+	 * @return A copy of the name of the file
+	 * @author Peter Piech
+	 */
+	public String getFileName()
+	{
+		return new String(mOriginalFileName);
+	}
+	
+	/**
+	 * Gets a copy of the date of transfer. This method should be called
+	 * after {@link #handleViewIntent} or the behavior will be undefined.
+	 * 
+	 * @return A copy of the date of transfer
+	 * @author Peter Piech
+	 */
+	public Date getDateTransferred()
+	{
+		return new Date(mDateTransferred.getTime());
+	}
+	
+	/**
 	 * Creates an {@link android.content.Intent} to start an Android application
 	 * on the user's device capable of opening the provided filename in the
 	 * SDCard:/FileFly/received directory
@@ -263,7 +308,7 @@ public class FilesIntentHandler
 	public static Intent openFile(String filename)
 	{
 		// Create File object
-		String openFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/FileFly/received/" + filename; // path to FileFly/received folder PLUS filename
+		String openFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FileFly/received/" + filename; // path to FileFly/received folder PLUS filename
 		File openFile = new File(openFilePath);
 		// create URI
 		Uri uri = Uri.fromFile(openFile);
