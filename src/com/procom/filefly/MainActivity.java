@@ -3,6 +3,8 @@ package com.procom.filefly;
 import java.io.File;
 import java.util.Locale;
 
+import com.procom.filefly.util.FilesIntentHandler;
+
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -195,7 +197,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		String intentAction = intent.getAction(); // retrieve the intent action
 		if (intentAction.equals(Intent.ACTION_VIEW)) // i.e. an incoming file intent
     	{
-    		Receive receive = new Receive(this);
+    		FilesIntentHandler receive = new FilesIntentHandler(this);
     		receive.handleViewIntent();
     		openReceivedFileAndTab = true;
     	}
