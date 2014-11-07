@@ -1,39 +1,41 @@
-package com.procom.filefly;
+package com.procom.filefly.util;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 /**
- * Used to respond to an ACTION_VIEW intent from the Android Beam API.
- * Copies the transferred file into the received subdirectory of the
- * FileFly directory found on the root of the SD Card.
+ * Set of methods used to handle and issue new
+ * ACTION_VIEW intents. 
  * 
  * @author Peter Piech, Saurabh Sharma, Jacob Abramson
  * @version 0.2a
- * @since 2014-10-15
+ * @since 2014-11-7
  *
  */
-public class Receive
+public class FilesIntentHandler
 {
 	/** A {@link java.io.File} representing the path to the transferred file */
 	private File mFileSource;
 	
 	/** A {@link java.io.File} representing the path to the file after being saved locally */
 	private File mFileDest;
-    
-    /** The parsed out sender's first name */
+	
+	/** The parsed out sender's first name */
     private String mFirstName;
     
     /** The parsed out sender's last name */
@@ -49,12 +51,12 @@ public class Receive
     private Activity mActivity;
     
     /**
-     * Constructs a new {@link com.procom.filefly.Receive} object
+     * Constructs a new {@link com.procom.filefly.util.FilesIntentHandler} object
      * and initializes member fields.
      * 
      * @author Peter Piech
      */
-    public Receive(Activity activity)
+    public FilesIntentHandler(Activity activity)
     {
     	mDateTransferred = new Date(); // sets this date as the current timestamp
     	mFirstName = new String();
@@ -75,6 +77,7 @@ public class Receive
 		// Get the Intent action
         Intent intent = getIntent();
         String action = intent.getAction();
+        mFileSource = null;
         /*
          * For ACTION_VIEW, the Activity is being asked to display data.
          * Get the URI.
@@ -101,9 +104,6 @@ public class Receive
 
             // call function to save file to FileFly/received folder
             saveFile();
-            
-            // open file automatically after saving it locally
-            //FileViewer.openFile(context goes here, mFileDest);
         }
     }
 
@@ -120,7 +120,7 @@ public class Receive
 	 */
     private File handleFileUri(Uri beamUri) 
     {
-        String fileName = beamUri.getPath(); // Get the path part of the URI
+    	String fileName = beamUri.getPath(); // Get the path part of the URI
         mOriginalFileName = grabNameFile(fileName); // parse out first/last name and original filename
         return new File(fileName);
     }
@@ -209,16 +209,16 @@ public class Receive
     }
     
     /**
-	 * To save the received file to local storage in FileFly/received
+	 * Saves the received file to local storage in FileFly/received
 	 * on the SD card.
-	 * 
+	 * @param fileSrc The {@link java.io.File} representing the file to be moved
+	 * @return The {@link java.io.File} representing the file saved in the received folder
 	 * @author Jacob Abramson
 	 */
 	private void saveFile()
 	{
-		
 		// check if external storage is writable
-		if (isExternalStorageWritable())
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 		{
 			
 			// grab destination folder for transferred file
@@ -227,10 +227,18 @@ public class Receive
             
             try
             {
-            	FileUtils.moveFile(mFileSource, mFileDest);
+            	// TODO: remove Apache Commons IO library
+            	// TODO: implement file move algorithm using JDK 1.6 methods only that handles filename exists conflicts
+            	FileUtils.copyFile(mFileSource, mFileDest);
+            }
+            catch (FileExistsException e)
+            {
+            	mFileDest = null;
+            	e.printStackTrace();
             }
             catch (IOException e)
             {
+            	mFileDest = null;
             	e.printStackTrace();
             }
             
@@ -244,22 +252,30 @@ public class Receive
 	}
 	
 	/**
-	 * Checks if external storage is writable
+	 * Creates an {@link android.content.Intent} to start an Android application
+	 * on the user's device capable of opening the provided {@link java.io.File}
 	 * 
-	 * @return True if external storage is writable, False otherwise
-	 * 
-	 * @author Jacob Abramson
+	 * @return An {@link android.content.Intent} that will open the file provided
+	 * @author Jacob Abramson, Peter Piech
 	 */
-	private boolean isExternalStorageWritable()
+	public static Intent openFile(File fileSrc)
 	{
-	    return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+		// create URI
+		Uri uri = Uri.fromFile(fileSrc);
+		// create intent
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		
+		String extension = MimeTypeMap.getFileExtensionFromUrl(fileSrc.getAbsolutePath()); // get the extension from the filename
+		String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension); // figure out the MIME type by the extension
+		
+		intent.setDataAndTypeAndNormalize(uri, mimeType); // set the data Uri and MIME type String on the Intent
+		return intent;
 	}
-    
-    /**
+	
+	/**
 	 * Retrieves the attached {@link android.app.Activity}'s intent
 	 * 
 	 * @return The intent from the attached {@link android.app.Activity}
-	 * 
 	 * @author Peter Piech
 	 */
 	private Intent getIntent()
