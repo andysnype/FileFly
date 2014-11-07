@@ -7,6 +7,8 @@ import java.util.Date;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
+import com.procom.filefly.model.Document;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -227,8 +229,6 @@ public class FilesIntentHandler
             
             try
             {
-            	// TODO: remove Apache Commons IO library
-            	// TODO: implement file move algorithm using JDK 1.6 methods only that handles filename exists conflicts
             	FileUtils.copyFile(mFileSource, mFileDest);
             }
             catch (FileExistsException e)
@@ -253,19 +253,24 @@ public class FilesIntentHandler
 	
 	/**
 	 * Creates an {@link android.content.Intent} to start an Android application
-	 * on the user's device capable of opening the provided {@link java.io.File}
+	 * on the user's device capable of opening the provided filename in the
+	 * SDCard:/FileFly/received directory
 	 * 
-	 * @return An {@link android.content.Intent} that will open the file provided
+	 * @param filename The name of a file in the SDCard:/FileFly/received directory
+	 * @return An {@link android.content.Intent} that will open the filename provided
 	 * @author Jacob Abramson, Peter Piech
 	 */
-	public static Intent openFile(File fileSrc)
+	public static Intent openFile(String filename)
 	{
+		// Create File object
+		String openFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()  + "/FileFly/received/" + filename; // path to FileFly/received folder PLUS filename
+		File openFile = new File(openFilePath);
 		// create URI
-		Uri uri = Uri.fromFile(fileSrc);
+		Uri uri = Uri.fromFile(openFile);
 		// create intent
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		
-		String extension = MimeTypeMap.getFileExtensionFromUrl(fileSrc.getAbsolutePath()); // get the extension from the filename
+		String extension = MimeTypeMap.getFileExtensionFromUrl(openFile.getAbsolutePath()); // get the extension from the filename
 		String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension); // figure out the MIME type by the extension
 		
 		intent.setDataAndTypeAndNormalize(uri, mimeType); // set the data Uri and MIME type String on the Intent

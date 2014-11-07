@@ -203,7 +203,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	}
 	}
 
-
     /**
 	 * Inflates the options menu in the {@link android.app.ActionBar} with the Settings menu item
 	 * 
