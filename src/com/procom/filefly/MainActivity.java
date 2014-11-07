@@ -49,11 +49,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     /** Instance of {@link com.procom.filefly.SendFragment} to be managed by the ViewPager */
     private Fragment mSenderFragment = new SendFragment();
     
-    /** Instance of {@link com.procom.filefly.DocumentListFragment} to be managed by the ViewPager */
-    private Fragment mDocumentListFragment = new DocumentListFragment();
-
     /** The {@link android.support.v4.view.ViewPager} that will host the section contents */
     private ViewPager mViewPager;
+    
+    /** Instance of {@link com.procom.filefly.SqliteController} to act as an interface with SQLite */
+    private SqliteController sqliteController = new SqliteController(this);
+
+    /** Instance of {@link com.procom.filefly.DocumentListFragment} to be managed by the ViewPager */
+    private Fragment mDocumentListFragment = new DocumentListFragment(sqliteController);
     
     /**
      * Boolean used in conjunction with {@link com.procom.filefly.MainActivity#onNewIntent} to determine if
