@@ -29,9 +29,20 @@ public class DocumentListFragment extends Fragment
 	 */
 	private List<Document> documents;
 	
-	/** The {@link com.procom.filefly.DocumentListAdapter} that is used to back the {@link android.widget.ListView} */
+	/** The {@link com.procom.filefly.DocumentListAdapter} that is used to back the 
+	 * {@link android.widget.ListView} 
+	 */
 	private DocumentListAdapter listadapter;
 	
+	/** The {@link com.procom.filefly.SqliteController} is used as an API for 
+	 * {@link android.database.sqlite.SQLiteDatabase} 
+	 */
+	private SqliteController sqliteController;
+    
+	public DocumentListFragment(SqliteController sqliteController)
+	{
+		   this.sqliteController = sqliteController;
+	}
 	/**
 	 * @return The {@link android.widget.View} which is actually a {@link android.widget.ListView}
 	 * seen in the main user interface.  This method is called early in the lifecycle of the
