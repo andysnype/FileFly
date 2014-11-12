@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
  
 import com.procom.filefly.model.Document;
 
@@ -105,7 +106,14 @@ public class DocumentListAdapter extends BaseAdapter
 	public View getView(final int index, View convertView, ViewGroup parent)
 	{
 		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View itemView = inflater.inflate(R.layout.document_list_item, parent, false);
 		
+		TextView fileName = (TextView) itemView.findViewById(R.id.filename);
+		TextView firstName = (TextView) itemView.findViewById(R.id.firstname);
+		TextView lastName =  (TextView) itemView.findViewById(R.id.lastname);
+		fileName.setText(mDocuments.get(index).getFilename());
+		firstName.setText(mDocuments.get(index).getOwnerFirstName());
+		lastName.setText(mDocuments.get(index).getOwnerLastName());
 		// TODO: implement this function
 		// TODO: SQLite database integration
 		return null;

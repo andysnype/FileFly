@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 /**
  * The {@link android.app.Fragment} that establishes the user interface
@@ -53,6 +54,11 @@ public class DocumentListFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.document_list_fragment, container, false);
-        return rootView;
+		setHasOptionsMenu(true);
+		ListView documentsList = (ListView) rootView.findViewById(R.id.documentlist);
+		documents =  sqliteController.getAllDocuments();
+		listadapter = new DocumentListAdapter(this.getActivity(),documents);
+		documentsList.setAdapter(listadapter);
+		return rootView;
 	}
 }
