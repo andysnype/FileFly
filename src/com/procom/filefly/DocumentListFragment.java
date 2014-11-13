@@ -1,15 +1,22 @@
 package com.procom.filefly;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import com.procom.filefly.model.Document;
 
 import android.app.Fragment;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * The {@link android.app.Fragment} that establishes the user interface
@@ -40,10 +47,11 @@ public class DocumentListFragment extends Fragment
 	 */
 	private SqliteController sqliteController;
     
-	public DocumentListFragment(SqliteController sqliteController)
+	public DocumentListFragment(SqliteController _sqliteController)
 	{
-		   this.sqliteController = sqliteController;
+		this.sqliteController = _sqliteController; 
 	}
+	
 	/**
 	 * @return The {@link android.widget.View} which is actually a {@link android.widget.ListView}
 	 * seen in the main user interface.  This method is called early in the lifecycle of the
