@@ -21,6 +21,8 @@ import android.util.Log;
 import android.content.ContentValues; 
 import android.content.Context; 
 import android.database.Cursor;
+import android.database.SQLException;
+
 import com.procom.filefly.model.*;
 
 
@@ -36,7 +38,8 @@ import com.procom.filefly.model.*;
 
 public class SqliteController extends SQLiteOpenHelper  {
 	private static final String LOGCAT = null;
-		
+	private SQLiteDatabase tmpDB = null;
+	
 	public SqliteController(Context applicationcontext) 
 	{
 		super(applicationcontext, "datastore.db", null, 3);
@@ -95,11 +98,11 @@ public class SqliteController extends SQLiteOpenHelper  {
 	 * tables: table1, table2 and android_metadata.      
 	 */
 	private static final String DATABASE_CREATE = 
-     "CREATE TABLE " + "'" + table1  +  
+     "CREATE TABLE " + "'" + table1  + "'" + 
 		      "( " +   "'" + column_id  + "'" + " integer primary key autoincrement, " +  
-		      		   "'" + column_fileName + "'" + " text not null" +
-		      		   "'" + column_ownerFName + "'" + " text" + 
-		      		   "'" + column_ownerLName + "'" + " text" + 
+		      		   "'" + column_fileName + "'" + " text not null, " +
+		      		   "'" + column_ownerFName + "'" + " text, " + 
+		      		   "'" + column_ownerLName + "'" + " text, " + 
 		      		   "'" + column_dateTransferred + "'" + " text not null " +
 		        ");"+ 
      "CREATE TABLE " + "'" + "android_metadata" + "'" +
@@ -107,7 +110,7 @@ public class SqliteController extends SQLiteOpenHelper  {
 		        ");" + 
      "CREATE TABLE " + "'" + table2 + "' " +
 		        "( " + "'" + "name" + " TEXT, " +
-		        	   "'" + "seq" + "'" + " TEXT, " +
+		        	   "'" + "seq" + "'" + " TEXT " +
 		        ");"
 		        ;
 
