@@ -48,6 +48,7 @@ import com.procom.filefly.ChooseFileDialogFragment.ChooseFileDialogListener;
 public class SendFragment extends Fragment implements OnClickListener, ChooseFileDialogListener
 {
 	/* Member variables used for the Android Beam API: */
+	
 	/** The {@link android.nfc.NfcAdapter} that models the hardware NFC adapter */
 	private NfcAdapter mNfcAdapter;
 	

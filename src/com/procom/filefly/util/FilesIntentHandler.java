@@ -7,6 +7,10 @@ import java.util.Date;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 
+import com.procom.filefly.DocumentListFragment;
+import com.procom.filefly.MainActivity;
+import com.procom.filefly.model.Document;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -47,7 +51,10 @@ public class FilesIntentHandler
     private Date mDateTransferred;
     
     /** The attached {@link android.app.Activity} that received the ACTION_VIEW intent */
-    private Activity mActivity;
+    private MainActivity mActivity;
+    
+    /** The attached {@link com.procom.filefly.DocumentListFragment} that displays the list */
+    private DocumentListFragment mDocumentListFragment;
     
     /**
      * Constructs a new {@link com.procom.filefly.util.FilesIntentHandler} object
@@ -55,13 +62,14 @@ public class FilesIntentHandler
      * 
      * @author Peter Piech
      */
-    public FilesIntentHandler(Activity activity)
+    public FilesIntentHandler(MainActivity activity, DocumentListFragment documentListFragment)
     {
     	mDateTransferred = new Date(); // sets this date as the current timestamp
     	mFirstName = new String();
     	mLastName = new String();
     	mOriginalFileName = new String();
     	mActivity = activity;
+    	mDocumentListFragment = documentListFragment;
     }
 	
 	/**
@@ -103,6 +111,8 @@ public class FilesIntentHandler
 
             // call function to save file to FileFly/received folder
             saveFile();
+            mActivity.getSqliteController().insertData(new Document(mOriginalFileName, mFirstName, mLastName, mDateTransferred)); // insert the record of transfer into the database
+            mDocumentListFragment.getDocumentListAdapter().notifyDataSetChanged(); // refresh the list
         }
     }
 

@@ -32,21 +32,15 @@ import android.widget.Toast;
  */
 public class DocumentListFragment extends Fragment
 {
-	/** The {@link java.util.List} of {@link com.procom.filefly.model.Document}s that back the
-	 * {@link com.procom.filefly.DocumentListFragment}'s {@link android.widget.ListView}.
-	 */
-	private List<Document> documents;
+	/** The {@link java.util.List} of {@link com.procom.filefly.model.Document}s that back the {@link com.procom.filefly.DocumentListFragment}'s {@link android.widget.ListView} */
+	private List<Document> mDocuments;
 	
-	/** The {@link com.procom.filefly.DocumentListAdapter} that is used to back the 
-	 * {@link android.widget.ListView} 
-	 */
-	private DocumentListAdapter listadapter;
+	/** The {@link com.procom.filefly.DocumentListAdapter} that is used to back the {@link android.widget.ListView} */
+	private DocumentListAdapter mListAdapter;
 	
-	/** The {@link com.procom.filefly.SqliteController} is used as an API for 
-	 * {@link android.database.sqlite.SQLiteDatabase} 
-	 */
+	/** The {@link com.procom.filefly.SqliteController} is used as an API for {@link android.database.sqlite.SQLiteDatabase} */
 	private SqliteController mSqliteController;
-    
+	    
 	public DocumentListFragment(SqliteController sqliteController)
 	{
 		this.mSqliteController = sqliteController; 
@@ -55,7 +49,8 @@ public class DocumentListFragment extends Fragment
 	/**
 	 * @return The {@link android.widget.View} which is actually a {@link android.widget.ListView}
 	 * seen in the main user interface.  This method is called early in the lifecycle of the
-	 * {@link
+	 * {@link com.procom.filefly.DocumentListFragment}
+	 * 
 	 * @author Peter Piech
 	 */
 	@Override
@@ -64,9 +59,19 @@ public class DocumentListFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.document_list_fragment, container, false);
 		setHasOptionsMenu(true);
 		ListView documentsList = (ListView) rootView.findViewById(R.id.documentlist);
-		documents =  mSqliteController.getAllDocuments();
-		listadapter = new DocumentListAdapter(this.getActivity(),documents);
-		documentsList.setAdapter(listadapter);
+		mDocuments =  mSqliteController.getAllDocuments();
+		mListAdapter = new DocumentListAdapter(this.getActivity(),mDocuments);
+		documentsList.setAdapter(mListAdapter);
 		return rootView;
+	}
+	
+	/**
+	 * Getter for the {@link com.procom.filefly.DocumentListAdapter}
+	 * 
+	 * @author Peter Piech
+	 */
+	public DocumentListAdapter getDocumentListAdapter()
+	{
+		return mListAdapter;
 	}
 }
