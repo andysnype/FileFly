@@ -45,11 +45,11 @@ public class DocumentListFragment extends Fragment
 	/** The {@link com.procom.filefly.SqliteController} is used as an API for 
 	 * {@link android.database.sqlite.SQLiteDatabase} 
 	 */
-	private SqliteController sqliteController;
+	private SqliteController mSqliteController;
     
-	public DocumentListFragment(SqliteController _sqliteController)
+	public DocumentListFragment(SqliteController sqliteController)
 	{
-		this.sqliteController = _sqliteController; 
+		this.mSqliteController = sqliteController; 
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class DocumentListFragment extends Fragment
 		View rootView = inflater.inflate(R.layout.document_list_fragment, container, false);
 		setHasOptionsMenu(true);
 		ListView documentsList = (ListView) rootView.findViewById(R.id.documentlist);
-		documents =  sqliteController.getAllDocuments();
+		documents =  mSqliteController.getAllDocuments();
 		listadapter = new DocumentListAdapter(this.getActivity(),documents);
 		documentsList.setAdapter(listadapter);
 		return rootView;
