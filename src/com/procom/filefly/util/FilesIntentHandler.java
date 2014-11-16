@@ -199,7 +199,10 @@ public class FilesIntentHandler
     	// parse filename from absolute path
     	String[] delimSlashes = absPath.split("/");
     	String fn = delimSlashes[delimSlashes.length - 1];
-    	fn = fn.substring(5); // removes "files" from the beginning which is prepended by the Android Beam API
+    	if (fn.substring(0, 5).equals("files"))
+    	{
+    		fn = fn.substring(5); // removes "files" from the beginning which is prepended by the Android Beam API
+    	}
     	
     	// split string based on underscores
     	String[] result = fn.split("_");
