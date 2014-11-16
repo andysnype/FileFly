@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private SectionsPagerAdapter mSectionsPagerAdapter;
     
     /** Instance of {@link com.procom.filefly.SendFragment} to be managed by the ViewPager */
-    private Fragment mSenderFragment = new SendFragment();
+    private SendFragment mSenderFragment = new SendFragment();
     
     /** The {@link android.support.v4.view.ViewPager} that will host the section contents */
     private ViewPager mViewPager;
@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private SqliteController mSqliteController = new SqliteController(this);
     
     /** Instance of {@link com.procom.filefly.DocumentListFragment} to be managed by the ViewPager */
-    private Fragment mDocumentListFragment = new DocumentListFragment(mSqliteController);
+    private DocumentListFragment mDocumentListFragment = new DocumentListFragment(mSqliteController);
     
     /**
      * Boolean used in conjunction with {@link com.procom.filefly.MainActivity#onNewIntent} to determine if
@@ -200,7 +200,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		String intentAction = intent.getAction(); // retrieve the intent action
 		if (intentAction.equals(Intent.ACTION_VIEW)) // i.e. an incoming file intent
     	{
-    		FilesIntentHandler receive = new FilesIntentHandler(this);
+    		FilesIntentHandler receive = new FilesIntentHandler(this, mDocumentListFragment);
     		receive.handleViewIntent();
     		openReceivedFileAndTab = true;
     	}
@@ -348,6 +348,15 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
     }
+    
+    /**
+     * Getter for the {@link com.procom.filefly.SqliteController}
+     * 
+     * @return The {@link com.procom.filefly.SqliteController}
+     * 
+     * @author Peter Piech
+     */
+    public SqliteController getSqliteController() { return mSqliteController; }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

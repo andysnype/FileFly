@@ -176,7 +176,7 @@ public class SqliteController extends SQLiteOpenHelper  {
 						doc.getFilename() + 
 						doc.getOwnerFirstName() + 
 						doc.getOwnerLastName() +
-						doc.getOwnerLastName() +
+						(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz")).format(doc.getDateTransferred()) +
 						");"
 		);
 		stmt.execute();
@@ -227,7 +227,7 @@ public class SqliteController extends SQLiteOpenHelper  {
 				/*
 				 * Formats the date as Tue Nov 04 21:53:43 EST 2003	
 				 */
-				dateTransferred = new SimpleDateFormat("EEE MMM dd HH:mm zzz yyyy").parse(cursor.getString(4));
+				dateTransferred = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz").parse(cursor.getString(4));
 				Document d = new Document(filename, ownerFirstName, ownerLastName, dateTransferred) ;
 				docList.add(d);
 				Log.d("FILEFLY","dateTransferred = " + dateTransferred);
