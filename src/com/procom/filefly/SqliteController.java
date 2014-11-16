@@ -36,16 +36,8 @@ import com.procom.filefly.model.*;
  *
  */
 
-public class SqliteController extends SQLiteOpenHelper  {
-	private static final String LOGCAT = null;
-	private SQLiteDatabase tmpDB = null;
-	
-	public SqliteController(Context applicationcontext) 
-	{
-		super(applicationcontext, "datastore.db", null, 3);
-		Log.d(LOGCAT,"Created");
-	}
-	
+public class SqliteController extends SQLiteOpenHelper
+{
 	/**
 	 * A {@link java.lang.String} representing a table in the SQlite database as modeled by 
 	 * {@link com.procom.filefly.model.Document} 
@@ -113,6 +105,18 @@ public class SqliteController extends SQLiteOpenHelper  {
 		        	   "'" + "seq" + "'" + " TEXT " +
 		        ");"
 		        ;
+	
+	/**
+	 * Constructor for {@link com.procom.filefly.SqliteController}
+	 * 
+	 * @author Saurabh Sharma
+	 */
+	public SqliteController(Context applicationcontext) 
+	{
+		super(applicationcontext, "datastore.db", null, 3);
+		Log.d("FILEFLY","In constructor: created");
+	}
+	
 
 	/**
 	 * Creates an {@link android.database.sqlite.SQLiteDatabase} as per the 
@@ -192,9 +196,9 @@ public class SqliteController extends SQLiteOpenHelper  {
 	public void deleteDocument(String fileName) 
 	{ 
 		SQLiteDatabase database = this.getWritableDatabase();
-		Log.d(LOGCAT,"delete"); 	
+		Log.d("FILEFLY","In deleteDocument() now"); 	
 		String deleteQuery = "DELETE FROM document where _fileName='"+ fileName +"'"; 
-		Log.d("query",deleteQuery);	
+		Log.d("FILEFLY","deleteQuery = " + deleteQuery);	
 		database.execSQL(deleteQuery); 
 	}
 
