@@ -176,12 +176,12 @@ public class SqliteController extends SQLiteOpenHelper
 		SQLiteDatabase database = this.getWritableDatabase();
 		SQLiteStatement stmt = database.compileStatement(
 		"insert into "+ table1 + 
-		" values " + "(" +
-						doc.getFilename() + 
-						doc.getOwnerFirstName() + 
-						doc.getOwnerLastName() +
+		" values " + "( " + "'" +
+						doc.getFilename() + "', '" +
+						doc.getOwnerFirstName() + "', '" +  
+						doc.getOwnerLastName() + "', '" +
 						(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz")).format(doc.getDateTransferred()) +
-						");"
+						" );"
 		);
 		stmt.execute();
 		database.close();
