@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
  
 import com.procom.filefly.model.Document;
+import com.procom.filefly.util.FilesIntentHandler;
 
 /**
  * The {@link android.widget.BaseAdapter} used to back the ListView hosted
@@ -37,6 +38,10 @@ public class DocumentListAdapter extends BaseAdapter
 	 */
 	private List<Document> mDocuments;
 	
+	/** The {@link com.procom.filefly.SqliteController} is used as an API for {@link android.database.sqlite.SQLiteDatabase} */
+	private SqliteController mSqliteController;
+
+	
 	/**
 	 * Constructs an instance of {@link com.procom.filefly.DocumentListAdapter}.
 	 * 
@@ -46,10 +51,11 @@ public class DocumentListAdapter extends BaseAdapter
 	 * the {@link android.widget.ListView}
 	 * @author Peter Piech
 	 */
-	public DocumentListAdapter(Context context, List<Document> documents)
+	public DocumentListAdapter(Context context, SqliteController sqlcontroller, List<Document> documents)
 	{
 		mContext = context;
 		mDocuments = documents;
+		mSqliteController = sqlcontroller;
 	}
 
 	/**
@@ -101,7 +107,7 @@ public class DocumentListAdapter extends BaseAdapter
 	 * @param parent
 	 * 
 	 * @return The inflated {@link android.widget.View}
-	 * @author Peter Piech
+	 * @author Peter Piech, Andy Kakkaramadam
 	 * 
 	 */
 	@Override
@@ -121,7 +127,7 @@ public class DocumentListAdapter extends BaseAdapter
 
 			@Override
 			public void onClick(View view) {
-				
+				FilesIntentHandler.openFile(mDocuments.get(index).getFilename()); //Opens the file using FilesIntentHandler, the position inside the array mDocuments.
 				
 			} });
 		
@@ -129,8 +135,8 @@ public class DocumentListAdapter extends BaseAdapter
 
 			@Override
 			public boolean onLongClick(View view) {
-				
-				
+				mSqliteController.deleteDocument(mDocuments.get(index).getFilename()); //Call SQLite statement to delete the document.
+				DocumentListAdapter.this.notifyDataSetChanged();                       //Send notification that the data set has been altered.
 				return true;
 				
 				

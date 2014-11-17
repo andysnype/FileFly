@@ -60,7 +60,7 @@ public class DocumentListFragment extends Fragment
 		setHasOptionsMenu(true);
 		ListView documentsList = (ListView) rootView.findViewById(R.id.documentlist);
 		mDocuments =  mSqliteController.getAllDocuments();
-		mListAdapter = new DocumentListAdapter(this.getActivity(), mDocuments);
+		mListAdapter = new DocumentListAdapter(this.getActivity(), mSqliteController, mDocuments);
 		documentsList.setAdapter(mListAdapter);
 		return rootView;
 	}

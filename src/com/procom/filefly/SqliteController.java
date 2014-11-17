@@ -172,7 +172,7 @@ public class SqliteController extends SQLiteOpenHelper
 	 */
 
 	public void insertData(Document doc) 
-	{
+	{ 
 		SQLiteDatabase database = this.getWritableDatabase();
 		SQLiteStatement stmt = database.compileStatement(
 		"insert into "+ table1 + 
@@ -229,7 +229,7 @@ public class SqliteController extends SQLiteOpenHelper
 				try
 				{
 				/*
-				 * Formats the date as 11/04/2014 21:53:43 EST	
+				 * Formats the date as Tue Nov 04 21:53:43 EST 2003	
 				 */
 				dateTransferred = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz").parse(cursor.getString(4));
 				Document d = new Document(filename, ownerFirstName, ownerLastName, dateTransferred) ;
