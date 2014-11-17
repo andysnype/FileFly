@@ -43,7 +43,7 @@ public class DocumentListFragment extends Fragment
 	    
 	public DocumentListFragment(SqliteController sqliteController)
 	{
-		this.mSqliteController = sqliteController; 
+		this.mSqliteController = sqliteController;
 	}
 	
 	/**
