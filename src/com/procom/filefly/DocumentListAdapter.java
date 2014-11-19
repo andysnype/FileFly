@@ -20,7 +20,7 @@ import com.procom.filefly.util.FilesIntentHandler;
  * model.
  * 
  * @author Peter Piech
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-10-12
  *
  */

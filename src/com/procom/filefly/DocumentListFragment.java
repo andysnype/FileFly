@@ -26,7 +26,7 @@ import android.widget.Toast;
  * {@link android.widget.BaseAdapter} from the queried data.
  * 
  * @author Peter Piech
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-10-12
  *
  */

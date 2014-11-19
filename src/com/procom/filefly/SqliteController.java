@@ -23,7 +23,7 @@ import com.procom.filefly.model.Document;
  * creation and version management. 
  * Ref.: http://mrbool.com/how-to-insert-data-into-a-sqlite-database-in-android/28895
  * @author Saurabh Sharma
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-10-30
  *
  */

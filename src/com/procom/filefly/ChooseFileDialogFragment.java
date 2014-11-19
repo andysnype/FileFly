@@ -17,7 +17,7 @@ import android.app.DialogFragment;
  * draws the user interface for this interaction.
  * 
  * @author Peter Piech
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-10-18
  */
 public class ChooseFileDialogFragment extends DialogFragment
