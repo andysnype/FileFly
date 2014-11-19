@@ -117,31 +117,46 @@ public class DocumentListAdapter extends BaseAdapter
 		View itemView = inflater.inflate(R.layout.document_list_item, parent, false);
 		
 		TextView fileName = (TextView) itemView.findViewById(R.id.filename);
-		TextView firstName = (TextView) itemView.findViewById(R.id.firstname);
-		TextView lastName =  (TextView) itemView.findViewById(R.id.lastname);
+		TextView fullName = (TextView) itemView.findViewById(R.id.fullname);
+		TextView date = (TextView) itemView.findViewById(R.id.date);
 		fileName.setText(mDocuments.get(index).getFilename());
-		firstName.setText(mDocuments.get(index).getOwnerFirstName());
-		lastName.setText(mDocuments.get(index).getOwnerLastName());
+		fullName.setText(mDocuments.get(index).getOwnerFirstName() + ' ' + mDocuments.get(index).getOwnerLastName());
+		date.setText(mDocuments.get(index).getDateTransferredString());
 		
-		itemView.setOnClickListener(new OnClickListener() {
+		itemView.setOnClickListener(new OnClickListener()
+		{
 
 			@Override
-			public void onClick(View view) {
-				FilesIntentHandler.openFile(mDocuments.get(index).getFilename()); //Opens the file using FilesIntentHandler, the position inside the array mDocuments.
-				
-			} });
+			public void onClick(View view)
+			{
+				mContext.startActivity(FilesIntentHandler.openFile(mContext, mDocuments.get(index).getFilename())); // Opens the file using FilesIntentHandler, the position inside the array mDocuments.
+			}
+		});
 		
-		itemView.setOnLongClickListener(new OnLongClickListener() {
+		itemView.setOnLongClickListener(new OnLongClickListener()
+		{
 
 			@Override
-			public boolean onLongClick(View view) {
-				mSqliteController.deleteDocument(mDocuments.get(index).getFilename()); //Call SQLite statement to delete the document.
-				DocumentListAdapter.this.notifyDataSetChanged();                       //Send notification that the data set has been altered.
+			public boolean onLongClick(View view)
+			{
+				mSqliteController.deleteDocument(mDocuments.get(index).getFilename()); // Call SQLite statement to delete the document.
+				mDocuments.remove(index); // Remove the Document representation also
+				DocumentListAdapter.this.notifyDataSetChanged(); // Send notification that the data set has been altered.
 				return true;
-				
-				
-			} });
+			}
+		});
 		
-		return null;
+		return itemView;
+	}
+	
+	/**
+	 * Updates the {@link #mDocuments} member field with the provided {@link java.util.List}
+	 * 
+	 * @author Peter Piech
+	 */
+	public void updateDocuments(List<Document> newDocs)
+	{
+		mDocuments = newDocs;
+		notifyDataSetChanged();
 	}
 }

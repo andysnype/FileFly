@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private SectionsPagerAdapter mSectionsPagerAdapter;
     
     /** Instance of {@link com.procom.filefly.SendFragment} to be managed by the ViewPager */
-    private SendFragment mSenderFragment = new SendFragment();
+    private SendFragment mSendFragment = new SendFragment();
     
     /** The {@link android.support.v4.view.ViewPager} that will host the section contents */
     private ViewPager mViewPager;
@@ -76,6 +76,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        createDirectories(); // create the /FileFly and /FileFly/received directories on the SD Card (external storage)
         
         openReceivedFileAndTab = false; // initialize to false
         
@@ -153,21 +155,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
     
     /**
-     * Handles verifying access to external storage and creates necessary directories
-     * once write access has been verified by calling {@link #onStart()}.
-     * <p>
-     * This method is called after {@link #onCreate()} in the {@link android.app.Activity} lifecycle.
-     * 
-     * @author Peter Piech
-     */
-    @Override
-	protected void onStart()
-    {
-		super.onStart();
-		createDirectories(); // create the /FileFly and /FileFly/received directories on the SD Card (external storage)
-	}
-    
-    /**
      * Handles resumption from being paused.  This will check if a file was received and
      * open the "Received Files" tab if so. This method is called by the system
      * after {@link #onNewIntent} finishes.
@@ -181,6 +168,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     	if (openReceivedFileAndTab)
     	{
     		openReceivedFileAndTab = false;
+    		mDocumentListFragment.notifyDataBaseChanged();
     		getActionBar().setSelectedNavigationItem(1); // open the "Received Files" tab
     	}
     }
@@ -200,9 +188,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		String intentAction = intent.getAction(); // retrieve the intent action
 		if (intentAction.equals(Intent.ACTION_VIEW)) // i.e. an incoming file intent
     	{
-    		FilesIntentHandler receive = new FilesIntentHandler(this, mDocumentListFragment);
-    		receive.handleViewIntent();
+    		FilesIntentHandler receive = new FilesIntentHandler(this);
+    		String filename = receive.handleViewIntent();
     		openReceivedFileAndTab = true;
+    		startActivity(FilesIntentHandler.openFile(this, filename));
     	}
 	}
 
@@ -394,7 +383,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	switch (position)
         	{
         	case 0:
-        		return mSenderFragment;
+        		return mSendFragment;
         	case 1:
         		return mDocumentListFragment;
         	default:

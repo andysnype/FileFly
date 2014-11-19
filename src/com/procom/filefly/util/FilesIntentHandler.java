@@ -2,7 +2,9 @@ package com.procom.filefly.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
@@ -12,10 +14,15 @@ import com.procom.filefly.MainActivity;
 import com.procom.filefly.model.Document;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -53,33 +60,31 @@ public class FilesIntentHandler
     /** The attached {@link android.app.Activity} that received the ACTION_VIEW intent */
     private MainActivity mActivity;
     
-    /** The attached {@link com.procom.filefly.DocumentListFragment} that displays the list */
-    private DocumentListFragment mDocumentListFragment;
-    
     /**
      * Constructs a new {@link com.procom.filefly.util.FilesIntentHandler} object
      * and initializes member fields.
      * 
      * @author Peter Piech
      */
-    public FilesIntentHandler(MainActivity activity, DocumentListFragment documentListFragment)
+    public FilesIntentHandler(MainActivity activity)
     {
     	mDateTransferred = new Date(); // sets this date as the current timestamp
     	mFirstName = new String();
     	mLastName = new String();
     	mOriginalFileName = new String();
     	mActivity = activity;
-    	mDocumentListFragment = documentListFragment;
     }
 	
 	/**
 	 * Gets the incoming {@link android.content.Intent} with a {@link android.content.Intent#ACTION_VIEW} schema
 	 * and hands off the {@link android.net.Uri} to appropriate functions.
 	 * 
+	 * @return The filename of the received file as a {@link java.lang.String}
+	 * 
 	 * @author Saurabh Sharma
 	 * 
 	 */
-	public void handleViewIntent() 
+	public String handleViewIntent() 
     {
 		// Get the Intent action
         Intent intent = getIntent();
@@ -112,8 +117,8 @@ public class FilesIntentHandler
             // call function to save file to FileFly/received folder
             saveFile();
             mActivity.getSqliteController().insertData(new Document(mOriginalFileName, mFirstName, mLastName, mDateTransferred)); // insert the record of transfer into the database
-            mDocumentListFragment.getDocumentListAdapter().notifyDataSetChanged(); // refresh the list
         }
+        return mOriginalFileName;
     }
 
 	/**
@@ -318,7 +323,7 @@ public class FilesIntentHandler
 	 * @return An {@link android.content.Intent} that will open the filename provided
 	 * @author Jacob Abramson, Peter Piech
 	 */
-	public static Intent openFile(String filename)
+	public static Intent openFile(Context context, String filename)
 	{
 		// Create File object
 		String openFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FileFly/received/" + filename; // path to FileFly/received folder PLUS filename
@@ -328,10 +333,32 @@ public class FilesIntentHandler
 		// create intent
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		
-		String extension = MimeTypeMap.getFileExtensionFromUrl(openFile.getAbsolutePath()); // get the extension from the filename
+		String extension = openFile.getName().substring(openFile.getName().indexOf(".")+1); // get the extension from the filename
 		String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension); // figure out the MIME type by the extension
 		
 		intent.setDataAndTypeAndNormalize(uri, mimeType); // set the data Uri and MIME type String on the Intent
+		
+		PackageManager packageManager = context.getPackageManager();
+		List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+		String packageNameOfAppToHide = "com.procom.filefly";
+		List<Intent> targetIntents = new ArrayList<Intent>();
+		for (ResolveInfo currentInfo : activities)
+		{
+			String packageName = currentInfo.activityInfo.packageName;
+			if (!packageNameOfAppToHide.equals(packageName))
+			{
+				Intent targetIntent = new Intent(Intent.ACTION_VIEW);
+	            targetIntent.setDataAndTypeAndNormalize(uri, mimeType);
+	            targetIntent.setComponent(new ComponentName(packageName, currentInfo.activityInfo.name));
+	            targetIntents.add(targetIntent);
+			}
+		}
+		if (targetIntents.size() > 0)
+		{
+			intent = Intent.createChooser(targetIntents.remove(0), "Open file with");
+			intent.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetIntents.toArray(new Parcelable[] {}));
+		}
+		
 		return intent;
 	}
 	
