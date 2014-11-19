@@ -3,27 +3,19 @@
  */
 package com.procom.filefly;
 
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList; 
-import java.util.Date; 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import android.provider.SyncStateContract.Columns;
-import android.text.format.DateFormat;
-import android.util.Log; 
-import android.content.ContentValues; 
-import android.content.Context; 
+import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
-import com.procom.filefly.model.*;
+import com.procom.filefly.model.Document;
 
 
 /**
@@ -103,8 +95,10 @@ public class SqliteController extends SQLiteOpenHelper
      "CREATE TABLE " + "'" + table2 + "' " +
 		        "( " + "'" + "name" + " TEXT, " +
 		        	   "'" + "seq" + "'" + " TEXT " +
-		        ");"
-		        ;
+		        ");";
+	
+	/** The {@link java.text.SimpleDateFormat} used to store {@link java.util.Date}s as {@link java.lang.String}s */
+	private static final SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz");
 	
 	/**
 	 * Constructor for {@link com.procom.filefly.SqliteController}
@@ -114,7 +108,6 @@ public class SqliteController extends SQLiteOpenHelper
 	public SqliteController(Context applicationcontext) 
 	{
 		super(applicationcontext, "datastore.db", null, 3);
-		Log.d("FILEFLY","In constructor: created");
 	}
 	
 
@@ -175,12 +168,12 @@ public class SqliteController extends SQLiteOpenHelper
 	{ 
 		SQLiteDatabase database = this.getWritableDatabase();
 		SQLiteStatement stmt = database.compileStatement(
-		"insert into "+ table1 + 
+		"insert into "+ table1 + "(_filename, _ownerFirstName, _ownerLastName, _dateTransferred)" +
 		" values " + "( " + "'" +
 						doc.getFilename() + "', '" +
 						doc.getOwnerFirstName() + "', '" +  
 						doc.getOwnerLastName() + "', '" +
-						(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz")).format(doc.getDateTransferred()) +
+						mSimpleDateFormat.format(doc.getDateTransferred()) + "'" +
 						" );"
 		);
 		stmt.execute();
@@ -196,9 +189,7 @@ public class SqliteController extends SQLiteOpenHelper
 	public void deleteDocument(String fileName) 
 	{ 
 		SQLiteDatabase database = this.getWritableDatabase();
-		Log.d("FILEFLY","In deleteDocument() now"); 	
-		String deleteQuery = "DELETE FROM document where _fileName='"+ fileName +"'"; 
-		Log.d("FILEFLY","deleteQuery = " + deleteQuery);	
+		String deleteQuery = "DELETE FROM document where _fileName='"+ fileName +"'";
 		database.execSQL(deleteQuery); 
 	}
 
@@ -228,13 +219,12 @@ public class SqliteController extends SQLiteOpenHelper
 				ownerLastName = cursor.getString(3);
 				try
 				{
-				/*
-				 * Formats the date as Tue Nov 04 21:53:43 EST 2003	
-				 */
-				dateTransferred = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz").parse(cursor.getString(4));
-				Document d = new Document(filename, ownerFirstName, ownerLastName, dateTransferred) ;
-				docList.add(d);
-				Log.d("FILEFLY","dateTransferred = " + dateTransferred);
+					/*
+					 * Formats the date as 11/04/2014 21:53:43 EST
+					 */
+					dateTransferred = mSimpleDateFormat.parse(cursor.getString(4));
+					Document d = new Document(filename, ownerFirstName, ownerLastName, dateTransferred);
+					docList.add(d);
 				}
 				catch(ParseException p)
 				{

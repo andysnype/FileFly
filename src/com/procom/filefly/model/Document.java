@@ -1,5 +1,6 @@
 package com.procom.filefly.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -24,6 +25,9 @@ public class Document
 	
 	/** Date and time of transfer */
 	private Date mDateTransferred;
+	
+	/** The {@link java.text.SimpleDateFormat} used to store {@link java.util.Date}s as {@link java.lang.String}s */
+	private static final SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS zzz");
 	
 	/**
 	 * Constructs an instance of {@link com.procom.filefly.model.Document}.  Additional constructor may be added
@@ -82,5 +86,16 @@ public class Document
 	public Date getDateTransferred()
 	{
 		return new Date(mDateTransferred.getTime());
+	}
+	
+	/**
+	 * Returns the string form of the date transferred field.
+	 * 
+	 * @return The {@link Document}'s date of reception
+	 * @author Peter Piech
+	 */
+	public String getDateTransferredString()
+	{
+		return mSimpleDateFormat.format(mDateTransferred);
 	}
 }

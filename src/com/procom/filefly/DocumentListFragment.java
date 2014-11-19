@@ -43,7 +43,7 @@ public class DocumentListFragment extends Fragment
 	    
 	public DocumentListFragment(SqliteController sqliteController)
 	{
-		this.mSqliteController = sqliteController; 
+		mSqliteController = sqliteController;
 	}
 	
 	/**
@@ -66,12 +66,13 @@ public class DocumentListFragment extends Fragment
 	}
 	
 	/**
-	 * Getter for the {@link com.procom.filefly.DocumentListAdapter}
+	 * This is called to notify the fragment that the SQLite database has been updated externally
 	 * 
 	 * @author Peter Piech
 	 */
-	public DocumentListAdapter getDocumentListAdapter()
+	public void notifyDataBaseChanged()
 	{
-		return mListAdapter;
+		mDocuments = mSqliteController.getAllDocuments();
+		mListAdapter.updateDocuments(mDocuments);
 	}
 }

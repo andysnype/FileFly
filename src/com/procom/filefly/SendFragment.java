@@ -426,6 +426,7 @@ public class SendFragment extends Fragment implements OnClickListener, ChooseFil
 	public void onFileChosen(ChooseFileDialogFragment dialog)
 	{
 		mFilenameTextView.setText(dialog.getChosenFilename()); // set the TextView to be the resulting filename that the ChooseFileDialogFragment is storing
+		mFileUris[0] = null; // invalidate the previous choice
 	}
 	
 	/**
