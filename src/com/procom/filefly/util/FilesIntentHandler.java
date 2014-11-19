@@ -33,7 +33,7 @@ import android.widget.Toast;
  * ACTION_VIEW intents. 
  * 
  * @author Peter Piech, Saurabh Sharma, Jacob Abramson
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-11-7
  *
  */

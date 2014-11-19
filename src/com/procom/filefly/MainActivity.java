@@ -29,7 +29,7 @@ import android.widget.Toast;
  * and initializing write access to the /"SD Card"/FileFly/received/ directory tree.
  * 
  * @author Peter Piech
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-09-28
  *
  */

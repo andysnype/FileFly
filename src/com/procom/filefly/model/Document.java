@@ -9,7 +9,7 @@ import java.util.Date;
  * access by such classes as DocumentListFragment.
  * 
  * @author Peter Piech
- * @version 0.2a
+ * @version 0.7b
  * @since 2014-10-12
  */
 public class Document
