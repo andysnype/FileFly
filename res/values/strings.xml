@@ -20,11 +20,24 @@
     <string name="nfc_unavailable">NFC is unavailable</string>
     <string name="no_nfc">This app requires NFC to use.</string>
     <string name="ok">OK</string>
-    <string name="howtouse_paragraph">This app requires files to be placed in the FileFly folder 
-        							  on the SD Card to be able to send them. Received files can
-        							  be found in the FileFly/received folder on the SD Card.
-        							  </string>
-    <string name="about_paragraph">This app was designed and created by Jacob Abramson, Andy
-        						   Kakkaramadam, Peter Piech, and Saurabh Sharma during 2014.</string>
+    <string name="howtouse_paragraph">
+        This app requires files to be placed in the FileFly folder
+        on the SD Card to be able to send them. Received files can
+        be found in the FileFly/received folder on the SD Card.
+        To send a file, enter your first and last name, click
+        "Choose File", select from the list of available files,
+        and then click "Send" before touching smartphones together.
+        To receive a file, open the "Beam Complete" notification
+        and select FileFly from the menu.
+        </string>
+    <string name="about_paragraph">
+        This application and its source code are licensed under
+        the Apache License v2 and contains other projects under
+        the same license.  The Apache Commons IO library version
+        2.4 is used in this software. The source code and license
+        are available for download online at http://github.com/askii99/FileFly.
+        Copyright 2014 Jacob Abramson, Andy Kakkaramadam,
+        Peter Piech, and Saurabh Sharma.
+        </string>
 
 </resources>
