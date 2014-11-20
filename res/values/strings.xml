@@ -4,7 +4,7 @@
     <string name="app_name">FileFly</string>
     <string name="title_section1">Send</string>
     <string name="title_section2">Received Files</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
     <string name="action_howtouse">How to Use</string>
     <string name="first_name">First Name:</string>
     <string name="last_name">Last Name:</string>
@@ -24,5 +24,7 @@
         							  on the SD Card to be able to send them. Received files can
         							  be found in the FileFly/received folder on the SD Card.
         							  </string>
+    <string name="about_paragraph">This app was designed and created by Jacob Abramson, Andy
+        						   Kakkaramadam, Peter Piech, and Saurabh Sharma during 2014.</string>
 
 </resources>

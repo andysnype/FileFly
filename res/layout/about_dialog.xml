@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" 
+    android:paddingTop="9dip"
+    android:paddingBottom="3dip"
+    android:paddingStart="3dip"
+    android:paddingEnd="1dip">
+
+    
+  <TextView
+        android:id="@+id/about_paragraph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip"
+        android:text="@string/about_paragraph"
+        android:textAppearance="?android:attr/textAppearanceMedium" />  
+
+    
+</LinearLayout>

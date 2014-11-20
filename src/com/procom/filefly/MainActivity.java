@@ -3,9 +3,8 @@ package com.procom.filefly;
 import java.io.File;
 import java.util.Locale;
 
-import com.procom.filefly.util.FilesIntentHandler;
-
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.procom.filefly.util.FilesIntentHandler;
 
 /**
  * The {@link android.support.v4.app.FragmentActivity} responsible for handling the
@@ -220,8 +221,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings)
+        if (id == R.id.action_about) {
+        	Dialog dialog = new Dialog(this);
+        	dialog.setContentView(R.layout.about_dialog);
+        	dialog.setTitle(R.string.action_about);
+        	dialog.setCancelable(true);
+        	dialog.show();
+        	return true;
+        }
+        if (id == R.id.action_howtouse)
         {
+        	Dialog dialog = new Dialog(this);
+        	dialog.setContentView(R.layout.howtouse_dialog);
+        	dialog.setTitle(R.string.action_howtouse);
+        	dialog.setCancelable(true);
+        	dialog.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
